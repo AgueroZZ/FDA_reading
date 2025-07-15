@@ -326,22 +326,18 @@ div.tocify {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">FDA_reading</a>
+      <a class="navbar-brand" href="index.html">FDA Reading Group</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">Home</a>
-</li>
-<li>
-  <a href="about.html">About</a>
-</li>
-<li>
-  <a href="license.html">License</a>
+  <a href="index.html">Overview</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/AgueroZZ/FDA_reading">source</a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -514,13 +510,13 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong270346d">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong3f52d52">
 <span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Repository version:</strong> 270346d
+aria-hidden="true"></span> <strong>Repository version:</strong> 3f52d52
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrong270346d"
+<div id="strongRepositoryversionstrong3f52d52"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -529,7 +525,7 @@ and connecting the code version to the results is critical for
 reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version 270346d.
+The results in this page were generated with repository version 3f52d52.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -543,7 +539,13 @@ depends on. Below is the status of the Git repository when the results
 were generated:
 </p>
 <pre><code>
-working directory clean
+Ignored files:
+    Ignored:    .DS_Store
+
+Unstaged changes:
+    Modified:   analysis/_site.yml
+    Modified:   analysis/index.Rmd
+
 </code></pre>
 <p>
 Note that any generated files, e.g. HTML, png, CSS, etc., are not
@@ -587,6 +589,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+3f52d52
+</td>
+<td>
+Ziang Zhang
+</td>
+<td>
+2025-07-14
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -912,6 +931,43 @@ plot(data_sim$t, data_sim$y, pch = 19, col = &quot;grey&quot;,
      main = &quot;Simulated Data with Noise&quot;) 
 lines(data_sim$t, x_fun(data_sim$t), col = &quot;blue&quot;, lwd = 2)</code></pre>
 <p><img src="figure/chapter4.rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
+Past versions of unnamed-chunk-2-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+3f52d52
+</td>
+<td>
+Ziang Zhang
+</td>
+<td>
+2025-07-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Let’s try to fit a regression spline where the basis <span
 class="math inline">\(\{\phi_1(t),...,\phi_K(t)\}\)</span> are <span
 class="math inline">\(K\)</span> equally spaced cubic B-splines.</p>
@@ -944,6 +1000,43 @@ lines(data_sim$t, x_fun(data_sim$t), col = &quot;blue&quot;, lwd = 2)
 legend(&quot;topright&quot;, legend = c(&quot;Observed Data&quot;, &quot;Fitted Spline&quot;, &quot;True Function&quot;),
        col = c(&quot;grey&quot;, &quot;red&quot;, &quot;blue&quot;), pch = c(19, NA, NA), lty = c(NA, 1, 1), lwd = 2)</code></pre>
 <p><img src="figure/chapter4.rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
+Past versions of unnamed-chunk-3-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+3f52d52
+</td>
+<td>
+Ziang Zhang
+</td>
+<td>
+2025-07-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>What if we increase the number of basis functions <span
 class="math inline">\(K\)</span> to 50?</p>
 <pre class="r"><code>spline_50_mod &lt;- fit_spline(data_sim, K = 50)
@@ -955,6 +1048,43 @@ lines(data_sim$t, x_fun(data_sim$t), col = &quot;blue&quot;, lwd = 2)
 legend(&quot;topright&quot;, legend = c(&quot;Observed Data&quot;, &quot;Fitted Spline&quot;, &quot;True Function&quot;),
        col = c(&quot;grey&quot;, &quot;red&quot;, &quot;blue&quot;), pch = c(19, NA, NA), lty = c(NA, 1, 1), lwd = 2)</code></pre>
 <p><img src="figure/chapter4.rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
+Past versions of unnamed-chunk-4-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+3f52d52
+</td>
+<td>
+Ziang Zhang
+</td>
+<td>
+2025-07-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>What if we decrease the number of basis functions <span
 class="math inline">\(K\)</span> to 5?</p>
 <pre class="r"><code>spline_5_mod &lt;- fit_spline(data_sim, K = 5)
@@ -966,6 +1096,43 @@ lines(data_sim$t, x_fun(data_sim$t), col = &quot;blue&quot;, lwd = 2)
 legend(&quot;topright&quot;, legend = c(&quot;Observed Data&quot;, &quot;Fitted Spline&quot;, &quot;True Function&quot;),
        col = c(&quot;grey&quot;, &quot;red&quot;, &quot;blue&quot;), pch = c(19, NA, NA), lty = c(NA, 1, 1), lwd = 2)</code></pre>
 <p><img src="figure/chapter4.rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-1">
+Past versions of unnamed-chunk-5-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-5-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+3f52d52
+</td>
+<td>
+Ziang Zhang
+</td>
+<td>
+2025-07-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Based on the fitted result, it appears that <span
 class="math inline">\(K = 10\)</span> is a good balance between bias and
 variance, while <span class="math inline">\(K = 50\)</span> overfits the
@@ -994,6 +1161,43 @@ plot(K_vector, MSE_vector, type = &quot;b&quot;, pch = 19, col = &quot;blue&quot
 abline(v = min(K_vector[MSE_vector == min(MSE_vector)]), col = &quot;red&quot;, lty = 2)
 abline(h = min(MSE_vector), col = &quot;green&quot;, lty = 2)</code></pre>
 <p><img src="figure/chapter4.rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-6-1">
+Past versions of unnamed-chunk-6-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-6-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+3f52d52
+</td>
+<td>
+Ziang Zhang
+</td>
+<td>
+2025-07-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Through Monte Carlo simulation, we can also visualize the
 bias-variance trade-off by plotting the bias and variance
 separately.</p>
@@ -1092,6 +1296,43 @@ legend(&quot;topright&quot;,
        lty = c(1, 2, 3),
        bg = &quot;white&quot;)</code></pre>
 <p><img src="figure/chapter4.rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-1">
+Past versions of unnamed-chunk-7-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+3f52d52
+</td>
+<td>
+Ziang Zhang
+</td>
+<td>
+2025-07-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="uncertainty-quantification" class="section level2">
@@ -1225,6 +1466,43 @@ legend(&quot;topright&quot;,
        lty = c(NA, 1, 2, 1),
        bg = &quot;white&quot;)</code></pre>
 <p><img src="figure/chapter4.rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-1">
+Past versions of unnamed-chunk-9-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-9-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+3f52d52
+</td>
+<td>
+Ziang Zhang
+</td>
+<td>
+2025-07-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>What is the pointwise coverage of the interval averaged over the
 entire vector?</p>
 <pre class="r"><code>coverage &lt;- mean((x_fun(data_sim$t) &gt;= (yhat - qnorm(0.975) * sqrt(var_yhat))) &amp; 
@@ -1275,6 +1553,43 @@ abline(h = 0.95, col = &quot;red&quot;, lty = 2)
 legend(&quot;bottomright&quot;, legend = c(&quot;Empirical Coverage&quot;, &quot;Nominal 95%&quot;),
        col = c(&quot;blue&quot;, &quot;red&quot;), lty = c(1, 2), pch = c(19, NA), lwd = 2)</code></pre>
 <p><img src="figure/chapter4.rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-11-1">
+Past versions of unnamed-chunk-11-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-11-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+3f52d52
+</td>
+<td>
+Ziang Zhang
+</td>
+<td>
+2025-07-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>We could also double check how does the estimated error variance
 changes with <span class="math inline">\(K\)</span>, which was suggested
 by the author as a way to pick the number of basis functions <span
@@ -1312,6 +1627,43 @@ plot(K_values, sigma2_values, type = &quot;b&quot;, pch = 19, col = &quot;darkgr
      ylab = &quot;Estimated Error Variance&quot;,
      main = &quot;Estimated Error Variance vs Number of Basis Functions&quot;)</code></pre>
 <p><img src="figure/chapter4.rmd/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-12-1">
+Past versions of unnamed-chunk-12-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-12-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+3f52d52
+</td>
+<td>
+Ziang Zhang
+</td>
+<td>
+2025-07-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Based on the figure, it seems like <span class="math inline">\(K =
 20\)</span> is indeed a good choice to balance the bias-variance
 trade-off. After <span class="math inline">\(K = 20\)</span>, the
@@ -1399,6 +1751,43 @@ plot(data_sim$t, data_sim$y, pch = 19, col = &quot;grey&quot;,
      main = &quot;Nadaraya-Watson Kernel Smoother (Gaussian Kernel, h=0.2)&quot;)
 lines(data_sim$t, yhat_gaussian, col = &quot;red&quot;, lwd = 2)</code></pre>
 <p><img src="figure/chapter4.rmd/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-14-1">
+Past versions of unnamed-chunk-14-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-14-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+3f52d52
+</td>
+<td>
+Ziang Zhang
+</td>
+<td>
+2025-07-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Let’s take a look at the EDF of this smoother:</p>
 <pre class="r"><code>sum(diag(S_gaussian))</code></pre>
 <pre><code>[1] 20.59767</code></pre>
@@ -1423,6 +1812,43 @@ legend(&quot;topright&quot;,
        lty = c(NA, 1, 2, 3, 4),
        bg = &quot;white&quot;)</code></pre>
 <p><img src="figure/chapter4.rmd/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-16-1">
+Past versions of unnamed-chunk-16-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-16-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+3f52d52
+</td>
+<td>
+Ziang Zhang
+</td>
+<td>
+2025-07-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Let’s compare their EDF:</p>
 <pre class="r"><code>edf_gaussian_h05 &lt;- sum(diag(S_gaussian_h05))
 edf_gaussian_h01 &lt;- sum(diag(S_gaussian_h01))
@@ -1433,6 +1859,43 @@ plot(c(0.1, 0.2, 0.5), c(edf_gaussian_h01, edf_gaussian, edf_gaussian_h05),
      ylab = &quot;Effective Degrees of Freedom (EDF)&quot;,
      main = &quot;EDF of Nadaraya-Watson Kernel Smoother&quot;)</code></pre>
 <p><img src="figure/chapter4.rmd/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-17-1">
+Past versions of unnamed-chunk-17-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-17-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+3f52d52
+</td>
+<td>
+Ziang Zhang
+</td>
+<td>
+2025-07-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>What if we change the kernel function to a uniform kernel?</p>
 <pre class="r"><code>h_vector &lt;- c(0.1, 0.2, 0.5)
 uniform_kernel &lt;- function(u) {
@@ -1454,6 +1917,43 @@ legend(&quot;topright&quot;,
        lty = 1:length(h_vector),
        bg = &quot;white&quot;)</code></pre>
 <p><img src="figure/chapter4.rmd/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-18-1">
+Past versions of unnamed-chunk-18-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-18-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+3f52d52
+</td>
+<td>
+Ziang Zhang
+</td>
+<td>
+2025-07-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Let’s compare their EDF:</p>
 <pre class="r"><code>edf_uniform &lt;- sapply(S_uniform, function(S) sum(diag(S)))
 plot(h_vector, edf_uniform, 
@@ -1462,6 +1962,43 @@ plot(h_vector, edf_uniform,
      ylab = &quot;Effective Degrees of Freedom (EDF)&quot;,
      main = &quot;EDF of Nadaraya-Watson Kernel Smoother (Uniform Kernel)&quot;)</code></pre>
 <p><img src="figure/chapter4.rmd/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-19-1">
+Past versions of unnamed-chunk-19-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-19-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+3f52d52
+</td>
+<td>
+Ziang Zhang
+</td>
+<td>
+2025-07-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="local-polynomial-smoothing" class="section level3">
 <h3><strong>Local Polynomial Smoothing</strong></h3>
@@ -1563,6 +2100,43 @@ legend(&quot;topright&quot;,
        lwd = 2,
        bg = &quot;white&quot;)</code></pre>
 <p><img src="figure/chapter4.rmd/unnamed-chunk-21-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-21-1">
+Past versions of unnamed-chunk-21-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-21-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+3f52d52
+</td>
+<td>
+Ziang Zhang
+</td>
+<td>
+2025-07-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
