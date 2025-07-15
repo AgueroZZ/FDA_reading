@@ -1,0 +1,1712 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Ziang Zhang" />
+
+<meta name="date" content="2025-07-13" />
+
+<title>Chapter 4: Smoothing functional data by least squares</title>
+
+<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">FDA_reading</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Chapter 4: Smoothing functional data by
+least squares</h1>
+<h4 class="author">Ziang Zhang</h4>
+<h4 class="date">2025-07-13</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2025-07-14
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>FDA_reading/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20250713code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20250713)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20250713code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20250713)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong270346d">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong> 270346d
+</a>
+</p>
+</div>
+<div id="strongRepositoryversionstrong270346d"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version 270346d.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+working directory clean
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/chapter4.rmd</code>) and HTML
+(<code>docs/chapter4.html</code>) files. If you’ve configured a remote
+Git repository (see <code>?wflow_git_remote</code>), click on the
+hyperlinks in the table below to view the files as they were in that
+past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+270346d
+</td>
+<td>
+Ziang Zhang
+</td>
+<td>
+2025-07-14
+</td>
+<td>
+workflowr::wflow_publish("analysis/chapter4.rmd")
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="overview" class="section level2">
+<h2><strong>Overview</strong></h2>
+<p>The main content of this chapter includes:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Linear Smoother</strong></p>
+<ul>
+<li>Motivation from Least Squares</li>
+<li>Generalization to Linear Smoothers</li>
+<li>Effective Degrees of Freedom</li>
+</ul></li>
+<li><p><strong>Bias-Variance Trade-off</strong></p></li>
+<li><p><strong>Uncertainty Quantification</strong></p></li>
+<li><p><strong>Localized Least Squares</strong></p>
+<ul>
+<li>Motivation of Kernel Smoothing</li>
+<li>Localized Polynomial Regression</li>
+</ul></li>
+</ol>
+</div>
+<div id="linear-smoother" class="section level2">
+<h2><strong>Linear Smoother</strong></h2>
+<div id="least-squares" class="section level3">
+<h3><strong>Least Squares</strong></h3>
+<p>To motivate the concept of linear smoother, the author starts with
+the simple least squares problem:</p>
+<p>Assume</p>
+<p><span class="math display">\[
+y_i = x(t_i) + \epsilon_i,
+\]</span></p>
+<p>where <span class="math display">\[
+\epsilon_i \overset{iid}\sim \mathcal{N}(0, \sigma^2), \quad
+x(t) = \sum_{k=1}^K c_k \phi_k(t) =
+\boldsymbol{c}&#39;\boldsymbol{\phi}(t).
+\]</span></p>
+<p>The ordinary least squares approach considers the cost (or loss)
+function for each observation <span class="math inline">\((y_i,
+t_i)\)</span>:</p>
+<p><span class="math display">\[
+l(\boldsymbol{c} \mid y_i) = \left(y_i - \sum_{k=1}^K c_k
+\phi_k(t_i)\right)^2,
+\]</span></p>
+<p>which implies the overall loss function can be written as:</p>
+<p><span class="math display">\[
+\begin{aligned}
+l(\boldsymbol{c} \mid \boldsymbol{y}) &amp;= \sum_{i=1}^n \left(y_i -
+\sum_{k=1}^K c_k \phi_k(t_i)\right)^2 \\
+&amp;= \sum_{i=1}^n \left(y_i -
+\boldsymbol{c}&#39;\boldsymbol{\phi}(t_i)\right)^2 \\
+&amp;= (\boldsymbol{y} - \boldsymbol{\Phi}
+\boldsymbol{c})&#39;(\boldsymbol{y} - \boldsymbol{\Phi} \boldsymbol{c})
+\\
+&amp;= \|\boldsymbol{y} - \boldsymbol{\Phi} \boldsymbol{c}\|^2,
+\end{aligned}
+\]</span></p>
+<p>where <span class="math inline">\(\boldsymbol{\Phi}\)</span> is the
+design matrix with <span class="math inline">\(n\)</span> rows and <span
+class="math inline">\(K\)</span> columns, and <span
+class="math inline">\(\boldsymbol{\phi}(t_i) =
+[\boldsymbol{\phi}_1(t_i), ..., \boldsymbol{\phi}_K(t_i)]\)</span> is
+the <span class="math inline">\(i\)</span>-th row of <span
+class="math inline">\(\boldsymbol{\Phi}\)</span>.</p>
+<p>Therefore, the least square estimate of the coefficient vector <span
+class="math inline">\(\boldsymbol{c}\)</span> is given by: <span
+class="math display">\[\hat{\boldsymbol{c}} =
+(\boldsymbol{\Phi}&#39;\boldsymbol{\Phi})^{-1}\boldsymbol{\Phi}&#39;\boldsymbol{y}.\]</span></p>
+<p>The fitted values <span
+class="math inline">\(\hat{\boldsymbol{y}}\)</span> is: <span
+class="math display">\[
+\hat{\boldsymbol{y}} = \hat{\boldsymbol{x}}(\boldsymbol{t}) =
+\boldsymbol{\Phi}\hat{\boldsymbol{c}}
+=
+\underbrace{\boldsymbol{\Phi}(\boldsymbol{\Phi}&#39;\boldsymbol{\Phi})^{-1}\boldsymbol{\Phi}&#39;}_{\mathbf{S}}\,\boldsymbol{y}.
+\]</span></p>
+<p>The matrix <span class="math inline">\(\mathbf{S}\)</span> is called
+the <strong>smoothing matrix</strong> or <strong>hat matrix</strong>. It
+maps the observed data <span
+class="math inline">\(\boldsymbol{y}\)</span> to the fitted/smoothed
+values <span class="math inline">\(\hat{\boldsymbol{y}} =
+\hat{\boldsymbol{x}}(\boldsymbol{t})\)</span>.</p>
+<p>When the error terms <span class="math inline">\(\epsilon_i\)</span>
+have more complex variance structure, the least squares estimate can be
+generalized to weighted least squares: <span class="math display">\[
+\hat{\boldsymbol{c}} =
+(\boldsymbol{\Phi}&#39;\mathbf{W}\boldsymbol{\Phi})^{-1}\boldsymbol{\Phi}&#39;\mathbf{W}\boldsymbol{y},
+\]</span></p>
+<p>where <span class="math inline">\(\mathbf{W}\)</span> is a diagonal
+matrix with weights <span class="math inline">\(w_i\)</span> on the
+diagonal, and the fitted values are given by: <span
+class="math display">\[
+\hat{\boldsymbol{y}} =
+\boldsymbol{\Phi}(\boldsymbol{\Phi}&#39;\mathbf{W}\boldsymbol{\Phi})^{-1}\boldsymbol{\Phi}&#39;\mathbf{W}\boldsymbol{y}
+= \mathbf{S}\boldsymbol{y}.
+\]</span></p>
+<p>The smoothing matrix <span class="math inline">\(\mathbf{S}\)</span>
+now becomes: <span class="math display">\[
+\mathbf{S} =
+\boldsymbol{\Phi}(\boldsymbol{\Phi}&#39;\mathbf{W}\boldsymbol{\Phi})^{-1}\boldsymbol{\Phi}&#39;\mathbf{W}.
+\]</span></p>
+</div>
+<div id="generalization" class="section level3">
+<h3><strong>Generalization</strong></h3>
+<p>The OLS and WLS results generalize naturally to a broader class of
+linear smoothers.<br />
+A <strong>linear smoother</strong> is defined as a mapping from the
+observed data <span class="math inline">\(\boldsymbol{y}\)</span> to the
+fitted values <span class="math inline">\(\hat{\boldsymbol{y}}\)</span>
+that can be expressed in the form:</p>
+<p><span class="math display">\[
+\hat{\boldsymbol{y}} = \hat{\boldsymbol{x}}(\boldsymbol{t}) =
+\mathbf{S}\boldsymbol{y},
+\]</span></p>
+<p>for some matrix <span class="math inline">\(\mathbf{S}\)</span> that
+does not depend on <span
+class="math inline">\(\boldsymbol{y}\)</span>.</p>
+<p>The smoother is <strong>linear</strong> because each fitted value
+<span class="math inline">\(\hat{x}(t_i)\)</span> is a linear
+combination of the observed data <span
+class="math inline">\(\boldsymbol{y}\)</span>.</p>
+<p>For example, the simple interpolation smoother given by <span
+class="math inline">\(\hat{x}(t_i) = y_i\)</span> is a linear smoother
+with <span class="math inline">\(\mathbf{S} = \mathbf{I}\)</span>, where
+<span class="math inline">\(\mathbf{I}\)</span> is the identity
+matrix.</p>
+<p>Similarly, the sample mean smoother given by <span
+class="math inline">\(\hat{x}(t_i) = \bar{y}\)</span> is also a linear
+smoother with <span class="math inline">\(\mathbf{S} =
+\frac{1}{n}\mathbf{1}\mathbf{1}&#39;\)</span>, where <span
+class="math inline">\(\mathbf{1}\)</span> is a vector of ones.</p>
+<p>Many widely used smoothers are linear, because their:</p>
+<ol style="list-style-type: decimal">
+<li><p>theoretical properties such as bias and variance are easier to
+analyze.</p>
+<ul>
+<li><span
+class="math inline">\(\operatorname{Var}[\hat{\boldsymbol{x}}(\boldsymbol{t})]
+=
+\mathbf{S}\mathbf{\Sigma}_{\boldsymbol{y}}\mathbf{S}&#39;\)</span></li>
+<li><span
+class="math inline">\(\mathbb{E}[\hat{\boldsymbol{x}}(\boldsymbol{t})] =
+\mathbf{S}\mathbb{E}[\boldsymbol{y}]\)</span></li>
+</ul></li>
+<li><p>computation is often efficient, especially when <span
+class="math inline">\(\mathbf{S}\)</span> is sparse.</p>
+<ul>
+<li>If <span class="math inline">\(\mathbf{S}\)</span> is dense,
+matrix-vector computation takes <span
+class="math inline">\(\mathcal{O}(n^2)\)</span> time.</li>
+<li>If <span class="math inline">\(\mathbf{S}\)</span> is banded,
+matrix-vector computation takes <span
+class="math inline">\(\mathcal{O}(n \cdot \text{bandwidth})\)</span>
+time.</li>
+</ul></li>
+</ol>
+</div>
+<div id="effective-degrees-of-freedom" class="section level3">
+<h3><strong>Effective Degrees of Freedom</strong></h3>
+<p>In the OLS example, the dimension of <span
+class="math inline">\(\boldsymbol{c}\)</span> is <span
+class="math inline">\(K\)</span>, which is the number of basis
+functions.<br />
+As we increase <span class="math inline">\(K\)</span>, the fitted values
+<span class="math inline">\(\hat{\boldsymbol{y}}\)</span> become more
+flexible, but the model may also overfit the data.<br />
+On the other hand, if <span class="math inline">\(K\)</span> is too
+small, the model becomes simpler, but may not capture the underlying
+structure of the data.</p>
+<p>For more complex linear smoothers, the <strong>effective degrees of
+freedom (EDF)</strong> is a useful concept to quantify the flexibility
+of the smoother.<br />
+The effective degrees of freedom is defined as the trace of the
+smoothing matrix <span class="math inline">\(\mathbf{S}\)</span>:</p>
+<p><span class="math display">\[
+\textit{df} = \operatorname{tr}(\mathbf{S}) = \sum_{i=1}^n S_{ii},
+\]</span></p>
+<p>where <span class="math inline">\(S_{ii}\)</span> is the <span
+class="math inline">\(i\)</span>-th diagonal element of <span
+class="math inline">\(\mathbf{S}\)</span>.<br />
+Intuitively, the trace measures the total influence each observation has
+on its own fitted value.</p>
+<hr />
+<p><em>Example 1: Ordinary Least Squares</em></p>
+<p>If <span class="math inline">\(\mathbf{S} =
+\boldsymbol{\Phi}(\boldsymbol{\Phi}&#39;\boldsymbol{\Phi})^{-1}\boldsymbol{\Phi}&#39;\)</span>,
+then</p>
+<p><span class="math display">\[
+\textit{df} =
+\operatorname{tr}\bigl(\boldsymbol{\Phi}(\boldsymbol{\Phi}&#39;\boldsymbol{\Phi})^{-1}\boldsymbol{\Phi}&#39;\bigr)
+=
+\operatorname{tr}\bigl((\boldsymbol{\Phi}&#39;\boldsymbol{\Phi})^{-1}\boldsymbol{\Phi}&#39;\boldsymbol{\Phi}\bigr)
+= \operatorname{tr}(\mathbf{I}_{K\times K}) = K,
+\]</span></p>
+<p>where <span class="math inline">\(K\)</span> is the number of basis
+functions.</p>
+<hr />
+<p><em>Example 2: Weighted Least Squares</em></p>
+<p>If <span class="math inline">\(\mathbf{S} =
+\boldsymbol{\Phi}(\boldsymbol{\Phi}&#39;\mathbf{W}\boldsymbol{\Phi})^{-1}\boldsymbol{\Phi}&#39;\mathbf{W}\)</span>,
+then</p>
+<p><span class="math display">\[
+\textit{df} =
+\operatorname{tr}\bigl(\boldsymbol{\Phi}(\boldsymbol{\Phi}&#39;\mathbf{W}\boldsymbol{\Phi})^{-1}\boldsymbol{\Phi}&#39;\mathbf{W}\bigr)
+=
+\operatorname{tr}\bigl((\boldsymbol{\Phi}&#39;\mathbf{W}\boldsymbol{\Phi})^{-1}\boldsymbol{\Phi}&#39;\mathbf{W}\boldsymbol{\Phi}\bigr)
+= \operatorname{tr}(\mathbf{I}_{K\times K}) = K,
+\]</span></p>
+<p>where <span class="math inline">\(K\)</span> is the number of basis
+functions.</p>
+<hr />
+<p><em>Example 3: Interpolation</em></p>
+<p>If <span class="math inline">\(\mathbf{S} = \mathbf{I}_{n\times
+n}\)</span>, then</p>
+<p><span class="math display">\[
+\textit{df} = \operatorname{tr}(\mathbf{I}_{n\times n}) = n,
+\]</span></p>
+<p>where <span class="math inline">\(n\)</span> is the number of
+observations.</p>
+<hr />
+<p><em>Example 4: Sample Mean</em></p>
+<p>If <span class="math inline">\(\mathbf{S} =
+\frac{1}{n}\mathbf{1}\mathbf{1}&#39;\)</span>, then</p>
+<p><span class="math display">\[
+\textit{df} =
+\operatorname{tr}\left(\frac{1}{n}\mathbf{1}\mathbf{1}&#39;\right)
+= \frac{1}{n} \operatorname{tr}(\mathbf{1}\mathbf{1}&#39;)
+= \frac{1}{n} n = 1,
+\]</span></p>
+<p>where <span class="math inline">\(\mathbf{1}\)</span> is the vector
+of ones of length <span class="math inline">\(n\)</span>.</p>
+</div>
+</div>
+<div id="bias-variance-trade-off" class="section level2">
+<h2><strong>Bias-Variance Trade-off</strong></h2>
+<p>Recall that the mean squared error (MSE) at a point <span
+class="math inline">\(t\)</span> can be decomposed into bias and
+variance terms.</p>
+<p>We start with the definition:</p>
+<p><span class="math display">\[
+\operatorname{MSE}(\hat{x}(t)) = \mathbb{E}\bigl[(\hat{x}(t) -
+x(t))^2\bigr].
+\]</span></p>
+<p>We can add and subtract the expected value <span
+class="math inline">\(\mathbb{E}[\hat{x}(t)]\)</span> inside the squared
+term:</p>
+<p><span class="math display">\[
+= \mathbb{E}\bigl[(\hat{x}(t) - \mathbb{E}[\hat{x}(t)] +
+\mathbb{E}[\hat{x}(t)] - x(t))^2\bigr].
+\]</span></p>
+<p>Expanding the square:</p>
+<p><span class="math display">\[
+= \mathbb{E}\bigl[(\hat{x}(t) - \mathbb{E}[\hat{x}(t)])^2 \bigr]
++ 2\,\mathbb{E}\bigl[(\hat{x}(t) -
+\mathbb{E}[\hat{x}(t)])(\mathbb{E}[\hat{x}(t)] - x(t))\bigr]
++ (\mathbb{E}[\hat{x}(t)] - x(t))^2.
+\]</span></p>
+<p>Note that the cross-term is zero because:</p>
+<p><span class="math display">\[
+\mathbb{E}\bigl[\hat{x}(t) - \mathbb{E}[\hat{x}(t)]\bigr] = 0.
+\]</span></p>
+<p>Therefore, the decomposition simplifies to:</p>
+<p><span class="math display">\[
+= \underbrace{\mathbb{E}\bigl[(\hat{x}(t) -
+\mathbb{E}[\hat{x}(t)])^2\bigr]}_{\operatorname{Var}(\hat{x}(t))}
++ \underbrace{(\mathbb{E}[\hat{x}(t)] -
+x(t))^2}_{\operatorname{Bias}(\hat{x}(t))^2}.
+\]</span></p>
+<p>This gives the bias-variance trade-off formula:</p>
+<p><span class="math display">\[
+\operatorname{MSE}(\hat{x}(t)) = \operatorname{Var}(\hat{x}(t)) +
+\operatorname{Bias}(\hat{x}(t))^2.
+\]</span></p>
+<p>Typically, as the flexibility of the smoother increases (for example,
+as the effective degrees of freedom (EDF) increases), the
+<strong>variance</strong> term tends to increase while the
+<strong>bias</strong> term tends to decrease.</p>
+<p>This trade-off reflects the fact that more flexible models can better
+adapt to the data but are also more sensitive to noise.</p>
+<p>However, the author also noted that the <em>decrease in bias might
+not be perfectly monotonic for certain smoothing methods</em>. This is
+because the models may not be nested, so increasing EDF does not always
+guarantee uniformly lower bias across all points.</p>
+<div id="illustration" class="section level3">
+<h3><strong>Illustration</strong></h3>
+<pre class="r"><code>library(fda)
+
+# True function
+x_fun &lt;- function(x) sin(2.5 * x) + cos(0.9 * x)
+
+# Simulate n data from the regression model
+simulate_data &lt;- function(n, sigma = 0.2, seed = 123) {
+  set.seed(seed)
+  t &lt;- seq(0, 10, length.out = n)
+  y &lt;- x_fun(t) + rnorm(n, 0, sigma)
+  data.frame(t = t, y = y)
+}</code></pre>
+<p>Take a look at the simulated dataset:</p>
+<pre class="r"><code>data_sim &lt;- simulate_data(n = 100, sigma = 0.5)
+plot(data_sim$t, data_sim$y, pch = 19, col = &quot;grey&quot;, 
+     ylab = &quot;Observed Data&quot;, xlab = &quot;t&quot;,
+     main = &quot;Simulated Data with Noise&quot;) 
+lines(data_sim$t, x_fun(data_sim$t), col = &quot;blue&quot;, lwd = 2)</code></pre>
+<p><img src="figure/chapter4.rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Let’s try to fit a regression spline where the basis <span
+class="math inline">\(\{\phi_1(t),...,\phi_K(t)\}\)</span> are <span
+class="math inline">\(K\)</span> equally spaced cubic B-splines.</p>
+<pre class="r"><code># Fit regression spline with K cubic B-splines
+fit_spline &lt;- function(data, K) {
+  # Create B-spline basis
+  basis &lt;- create.bspline.basis(rangeval = range(data$t),
+                                nbasis = K,
+                                norder = 4)
+  
+  # Evaluate basis at observed t to get design matrix
+  Phi &lt;- eval.basis(data$t, basis)
+  
+  # Solve least squares
+  coef &lt;- solve(t(Phi) %*% Phi, t(Phi) %*% data$y)
+  
+  # Compute fitted values at observed t
+  fitted_values &lt;- as.vector(Phi %*% coef)
+  
+  return(fitted_values)
+}
+
+spline_10_mod &lt;- fit_spline(data_sim, K = 10)
+
+plot(data_sim$t, data_sim$y, pch = 19, col = &quot;grey&quot;, 
+     ylab = &quot;Observed Data&quot;, xlab = &quot;t&quot;,
+     main = &quot;Regression Spline with K=10&quot;)
+lines(data_sim$t, spline_10_mod, col = &quot;red&quot;, lwd = 2)
+lines(data_sim$t, x_fun(data_sim$t), col = &quot;blue&quot;, lwd = 2)
+legend(&quot;topright&quot;, legend = c(&quot;Observed Data&quot;, &quot;Fitted Spline&quot;, &quot;True Function&quot;),
+       col = c(&quot;grey&quot;, &quot;red&quot;, &quot;blue&quot;), pch = c(19, NA, NA), lty = c(NA, 1, 1), lwd = 2)</code></pre>
+<p><img src="figure/chapter4.rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>What if we increase the number of basis functions <span
+class="math inline">\(K\)</span> to 50?</p>
+<pre class="r"><code>spline_50_mod &lt;- fit_spline(data_sim, K = 50)
+plot(data_sim$t, data_sim$y, pch = 19, col = &quot;grey&quot;, 
+     ylab = &quot;Observed Data&quot;, xlab = &quot;t&quot;,
+     main = &quot;Regression Spline with K=50&quot;)
+lines(data_sim$t, spline_50_mod, col = &quot;red&quot;, lwd = 2)
+lines(data_sim$t, x_fun(data_sim$t), col = &quot;blue&quot;, lwd = 2)
+legend(&quot;topright&quot;, legend = c(&quot;Observed Data&quot;, &quot;Fitted Spline&quot;, &quot;True Function&quot;),
+       col = c(&quot;grey&quot;, &quot;red&quot;, &quot;blue&quot;), pch = c(19, NA, NA), lty = c(NA, 1, 1), lwd = 2)</code></pre>
+<p><img src="figure/chapter4.rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>What if we decrease the number of basis functions <span
+class="math inline">\(K\)</span> to 5?</p>
+<pre class="r"><code>spline_5_mod &lt;- fit_spline(data_sim, K = 5)
+plot(data_sim$t, data_sim$y, pch = 19, col = &quot;grey&quot;, 
+     ylab = &quot;Observed Data&quot;, xlab = &quot;t&quot;,
+     main = &quot;Regression Spline with K=5&quot;)
+lines(data_sim$t, spline_5_mod, col = &quot;red&quot;, lwd = 2)
+lines(data_sim$t, x_fun(data_sim$t), col = &quot;blue&quot;, lwd = 2)
+legend(&quot;topright&quot;, legend = c(&quot;Observed Data&quot;, &quot;Fitted Spline&quot;, &quot;True Function&quot;),
+       col = c(&quot;grey&quot;, &quot;red&quot;, &quot;blue&quot;), pch = c(19, NA, NA), lty = c(NA, 1, 1), lwd = 2)</code></pre>
+<p><img src="figure/chapter4.rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Based on the fitted result, it appears that <span
+class="math inline">\(K = 10\)</span> is a good balance between bias and
+variance, while <span class="math inline">\(K = 50\)</span> overfits the
+data and <span class="math inline">\(K = 5\)</span> under fits the
+data.</p>
+<p>Let’s quantify the empirical MSE of each model:</p>
+<pre class="r"><code>mse &lt;- function(fitted, true, data) {
+  mean((fitted - true(data$t))^2)
+}
+
+compute_mse &lt;- function(K_vector, x_fun, data) {
+  sapply(K_vector, function(K) {
+    fitted &lt;- fit_spline(data, K)
+    mse(fitted, x_fun, data)
+  })
+}
+
+K_vector &lt;- seq(5, 50, by = 1)
+MSE_vector &lt;- compute_mse(K_vector, x_fun, data_sim)
+
+plot(K_vector, MSE_vector, type = &quot;b&quot;, pch = 19, col = &quot;blue&quot;,
+     xlab = &quot;Number of Basis Functions (K)&quot;, 
+     ylab = &quot;Empirical MSE&quot;,
+     main = &quot;Empirical MSE vs Number of Basis Functions&quot;)
+
+abline(v = min(K_vector[MSE_vector == min(MSE_vector)]), col = &quot;red&quot;, lty = 2)
+abline(h = min(MSE_vector), col = &quot;green&quot;, lty = 2)</code></pre>
+<p><img src="figure/chapter4.rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Through Monte Carlo simulation, we can also visualize the
+bias-variance trade-off by plotting the bias and variance
+separately.</p>
+<pre class="r"><code># Monte Carlo simulation to decompose Bias^2 and Variance
+bias_variance_decomposition &lt;- function(K_vector, x_fun, n_sim, data_n, sigma, t_grid) {
+  
+  bias_mat &lt;- matrix(0, nrow = length(K_vector), ncol = length(t_grid))
+  var_mat &lt;- matrix(0, nrow = length(K_vector), ncol = length(t_grid))
+  mse_mat &lt;- matrix(0, nrow = length(K_vector), ncol = length(t_grid))
+  
+  for (k_idx in seq_along(K_vector)) {
+    K &lt;- K_vector[k_idx]
+    fits &lt;- matrix(0, nrow = n_sim, ncol = length(t_grid))
+    
+    for (sim in 1:n_sim) {
+      # Simulate new data
+      data_sim &lt;- simulate_data(n = data_n, sigma = sigma, seed = sim)
+      
+      # Fit spline on training data
+      basis &lt;- create.bspline.basis(rangeval = range(data_sim$t),
+                                    nbasis = K,
+                                    norder = 4)
+      Phi &lt;- eval.basis(data_sim$t, basis)
+      coef &lt;- solve(t(Phi) %*% Phi, t(Phi) %*% data_sim$y)
+      
+      # Predict on grid
+      Phi_grid &lt;- eval.basis(t_grid, basis)
+      fits[sim, ] &lt;- as.vector(Phi_grid %*% coef)
+    }
+    
+    # True function on grid
+    true_vals &lt;- x_fun(t_grid)
+    
+    # Bias^2
+    avg_fit &lt;- colMeans(fits)
+    bias2 &lt;- (avg_fit - true_vals)^2
+    
+    # Variance
+    var_vals &lt;- apply(fits, 2, var)
+    
+    # MSE
+    mse_vals &lt;- bias2 + var_vals
+    
+    # Store
+    bias_mat[k_idx, ] &lt;- bias2
+    var_mat[k_idx, ] &lt;- var_vals
+    mse_mat[k_idx, ] &lt;- mse_vals
+  }
+  
+  return(list(bias2 = bias_mat, var = var_mat, mse = mse_mat))
+}
+
+# Define simulation parameters
+K_vector &lt;- seq(5, 50, by = 1)
+n_sim &lt;- 50
+data_n &lt;- 100
+sigma &lt;- 0.5
+t_grid &lt;- seq(0, 10, length.out = 200)
+
+# Run simulation
+set.seed(123)
+decomp_result &lt;- bias_variance_decomposition(K_vector, x_fun, n_sim, data_n, sigma, t_grid)
+
+# Aggregate over grid by averaging
+avg_bias2 &lt;- rowMeans(decomp_result$bias2)
+avg_var &lt;- rowMeans(decomp_result$var)
+avg_mse &lt;- rowMeans(decomp_result$mse)
+
+# Set up plot
+plot(K_vector, avg_mse, type = &quot;n&quot;,
+     ylim = c(0, max(avg_mse, avg_bias2, avg_var) * 1.05),
+     ylab = &quot;Error&quot;, xlab = &quot;Number of Basis Functions (K)&quot;,
+     main = &quot;Bias-Variance Trade-off&quot;)
+
+# Add shaded areas for Bias^2 and Variance and MSE
+polygon(c(K_vector, rev(K_vector)),
+        c(avg_bias2, rep(0, length(avg_bias2))),
+        col = adjustcolor(&quot;red&quot;, alpha.f = 0.2), border = NA)
+polygon(c(K_vector, rev(K_vector)),
+        c(avg_var, rep(0, length(avg_var))),
+        col = adjustcolor(&quot;blue&quot;, alpha.f = 0.2), border = NA)
+polygon(c(K_vector, rev(K_vector)),
+        c(avg_mse, rep(0, length(avg_mse))),
+        col = adjustcolor(&quot;black&quot;, alpha.f = 0.2), border = NA)
+
+# Add lines on top
+lines(K_vector, avg_mse, col = &quot;black&quot;, lwd = 2, lty = 1)
+lines(K_vector, avg_bias2, col = &quot;red&quot;, lwd = 2, lty = 2)
+lines(K_vector, avg_var, col = &quot;blue&quot;, lwd = 2, lty = 3)
+
+# Add legend
+legend(&quot;topright&quot;,
+       legend = c(&quot;MSE&quot;, &quot;Bias^2&quot;, &quot;Variance&quot;),
+       col = c(&quot;black&quot;, &quot;red&quot;, &quot;blue&quot;),
+       lwd = 2,
+       lty = c(1, 2, 3),
+       bg = &quot;white&quot;)</code></pre>
+<p><img src="figure/chapter4.rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="uncertainty-quantification" class="section level2">
+<h2><strong>Uncertainty Quantification</strong></h2>
+<p>In this chapter, the author also discusses details regarding the
+uncertainty quantification of the smoother.</p>
+<p>For <strong>linear smoothers</strong>, the derivation of the sampling
+variance of the fitted values is straightforward:</p>
+<p><span class="math display">\[
+\operatorname{Var}[\hat{\boldsymbol{x}}(\boldsymbol{t})]
+= \operatorname{Var}[\mathbf{S}\boldsymbol{y}]
+= \mathbf{S}\mathbf{\Sigma}_{\boldsymbol{y}}\mathbf{S}&#39;.
+\]</span></p>
+<p>Under the standard OLS assumption of homoskedastic errors:</p>
+<p><span class="math display">\[
+\mathbf{\Sigma}_{\boldsymbol{y}} = \sigma^2 \mathbf{I}_{n \times n},
+\]</span></p>
+<p>we have:</p>
+<p><span class="math display">\[
+\operatorname{Var}[\hat{\boldsymbol{x}}(\boldsymbol{t})]
+= \sigma^2 \mathbf{S}\mathbf{S}&#39;.
+\]</span></p>
+<p>Plugging in the OLS definition of the smoothing matrix:</p>
+<p><span class="math display">\[
+\mathbf{S} =
+\boldsymbol{\Phi}(\boldsymbol{\Phi}&#39;\boldsymbol{\Phi})^{-1}\boldsymbol{\Phi}&#39;,
+\]</span></p>
+<p>we can simplify:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\operatorname{Var}[\hat{\boldsymbol{x}}(\boldsymbol{t})]
+&amp;= \sigma^2 \mathbf{S}\mathbf{S}&#39; \\
+&amp;= \sigma^2
+\boldsymbol{\Phi}(\boldsymbol{\Phi}&#39;\boldsymbol{\Phi})^{-1}\boldsymbol{\Phi}&#39;
+\boldsymbol{\Phi}(\boldsymbol{\Phi}&#39;\boldsymbol{\Phi})^{-1}\boldsymbol{\Phi}&#39;
+\\
+&amp;= \sigma^2
+\boldsymbol{\Phi}(\boldsymbol{\Phi}&#39;\boldsymbol{\Phi})^{-1}\boldsymbol{\Phi}&#39;
+\\
+&amp;= \sigma^2 \mathbf{S}.
+\end{aligned}
+\]</span></p>
+<p>This final result shows that, under homoskedastic errors, the
+variance of the smoother at the observed points is proportional to the
+smoother matrix itself.</p>
+<p><strong><em>Note: This is another way to understand why the effective
+degrees of freedom (EDF) is defined as the trace of the smoothing matrix
+<span class="math inline">\(\mathbf{S}\)</span>. The trace gives the
+total variance of the fitted values, which is a measure of the
+flexibility of the smoother. For the same reason, some times the EDF is
+defined as <span class="math inline">\(EDF =
+tr\{\mathbf{S}\mathbf{S}&#39;\}\)</span>.</em></strong></p>
+<p>When the error variance <span class="math inline">\(\sigma^2\)</span>
+is unknown, we can estimate it using the residuals: <span
+class="math display">\[
+s^2 = \frac{1}{n - K} \sum_{i}^n (y_i - \hat{y}_i) ^2.
+\]</span></p>
+<p>Using the estimated variance, a typical <span
+class="math inline">\((1-\alpha)\)</span> level <strong>pointwise
+confidence interval</strong> for the fitted value at a point <span
+class="math inline">\(t_i\)</span> is given by:</p>
+<p><span class="math display">\[
+\hat{x}(t_i) \pm z_{\alpha/2} \sqrt{\operatorname{Var}[\hat{x}(t_i)]}.
+\]</span></p>
+<p>However, the author notes the following important caveats regarding
+this interval:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Interpretation</strong>: This interval should be
+interpreted as a <em>pointwise</em> confidence interval, meaning it
+quantifies the uncertainty at each individual point <span
+class="math inline">\(t_i\)</span>. For <em>global</em> coverage across
+the entire domain, more sophisticated approaches such as
+<em>simultaneous confidence bands</em> are needed.</p></li>
+<li><p><strong>Ignored uncertainty</strong>: The interval does not
+account for the uncertainty in certain model choices or hyperparameters
+of the smoother, such as the number of basis functions (<span
+class="math inline">\(K\)</span>) or the estimated standard deviation of
+the error term (<span class="math inline">\(\sigma\)</span>).</p></li>
+<li><p><strong>Model misspecification</strong>: The interval will not be
+well-calibrated if the model assumptions are violated. In particular, if
+the fitted smoother is not flexible enough to capture the underlying
+structure of the data in certain regions, the true uncertainty may be
+underestimated.</p></li>
+</ol>
+<div id="illustration-1" class="section level3">
+<h3><strong>Illustration</strong></h3>
+<p>For the above dataset, let’s first fit the smoother (using B-splines)
+and compute the smoothing matrix:</p>
+<pre class="r"><code># Function to obtain the B-spline design matrix
+obtain_design &lt;- function(data, K) {
+  basis &lt;- create.bspline.basis(rangeval = range(data$t), nbasis = K, norder = 4)
+  Phi &lt;- eval.basis(data$t, basis)
+  return(Phi)
+}
+
+# Create design matrix and smoothing matrix
+Phi &lt;- obtain_design(data_sim, K = 20)
+S &lt;- Phi %*% solve(t(Phi) %*% Phi) %*% t(Phi)
+
+# Compute fitted values
+yhat &lt;- as.vector(S %*% data_sim$y)
+
+# Estimate residual standard deviation (sigma)
+s &lt;- sqrt(sum((data_sim$y - yhat)^2) / (nrow(data_sim) - sum(diag(S))))
+
+# Estimate pointwise variance of the fitted values
+var_yhat &lt;- s^2 * diag(S)</code></pre>
+<p>Let’s visualize the fitted values along with the pointwise confidence
+intervals:</p>
+<pre class="r"><code>plot(data_sim$t, data_sim$y, pch = 19, col = &quot;grey&quot;, 
+     ylab = &quot;Observed Data&quot;, xlab = &quot;t&quot;,
+     main = &quot;Fitted Spline with Pointwise Confidence Intervals&quot;)
+
+# Add fitted curve
+lines(data_sim$t, yhat, col = &quot;red&quot;, lwd = 2)
+
+# Add pointwise 95% confidence intervals as shaded band
+polygon(c(data_sim$t, rev(data_sim$t)),
+        c(yhat + qnorm(0.975) * sqrt(var_yhat), 
+          rev(yhat - qnorm(0.975) * sqrt(var_yhat))),
+        col = adjustcolor(&quot;red&quot;, alpha.f = 0.2), border = NA)
+
+# Add true function
+lines(data_sim$t, x_fun(data_sim$t), col = &quot;blue&quot;, lwd = 2, lty = 2)
+
+legend(&quot;topright&quot;,
+       legend = c(&quot;Observed Data&quot;, &quot;Fitted Spline&quot;, &quot;True Function&quot;, &quot;Pointwise CI&quot;),
+       col = c(&quot;grey&quot;, &quot;red&quot;, &quot;blue&quot;, adjustcolor(&quot;red&quot;, alpha.f = 0.2)),
+       pch = c(19, NA, NA, NA),
+       lwd = c(NA, 2, 2, NA),
+       lty = c(NA, 1, 2, 1),
+       bg = &quot;white&quot;)</code></pre>
+<p><img src="figure/chapter4.rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>What is the pointwise coverage of the interval averaged over the
+entire vector?</p>
+<pre class="r"><code>coverage &lt;- mean((x_fun(data_sim$t) &gt;= (yhat - qnorm(0.975) * sqrt(var_yhat))) &amp; 
+                 (x_fun(data_sim$t) &lt;= (yhat + qnorm(0.975) * sqrt(var_yhat))))
+coverage</code></pre>
+<pre><code>[1] 0.95</code></pre>
+<p>Let’s compute the pointwise coverage for different values of <span
+class="math inline">\(K\)</span>:</p>
+<pre class="r"><code># Function to compute pointwise coverage for given K
+compute_pointwise_coverage &lt;- function(data, K) {
+  # Design matrix and smoother matrix
+  Phi &lt;- obtain_design(data, K)
+  S &lt;- Phi %*% solve(t(Phi) %*% Phi) %*% t(Phi)
+  
+  # Fitted values
+  yhat &lt;- as.vector(S %*% data$y)
+  
+  # Estimate sigma
+  s &lt;- sqrt(sum((data$y - yhat)^2) / (nrow(data) - sum(diag(S))))
+  
+  # Estimated variance of fitted values
+  var_yhat &lt;- s^2 * diag(S)
+  
+  # True function
+  true_vals &lt;- x_fun(data$t)
+  
+  # Compute coverage
+  lower &lt;- yhat - qnorm(0.975) * sqrt(var_yhat)
+  upper &lt;- yhat + qnorm(0.975) * sqrt(var_yhat)
+  
+  coverage &lt;- mean(true_vals &gt;= lower &amp; true_vals &lt;= upper)
+  return(coverage)
+}
+
+# Vector of K values to test
+K_values &lt;- seq(5, 50, by = 5)
+
+# Compute coverage for each K
+coverage_values &lt;- sapply(K_values, function(K) compute_pointwise_coverage(data_sim, K))
+
+# Plot
+plot(K_values, coverage_values, type = &quot;b&quot;, pch = 19, col = &quot;blue&quot;,
+     ylim = c(0, 1),
+     xlab = &quot;Number of Basis Functions (K)&quot;, 
+     ylab = &quot;Pointwise Coverage&quot;,
+     main = &quot;Pointwise Coverage vs Number of Basis Functions&quot;)
+abline(h = 0.95, col = &quot;red&quot;, lty = 2)
+legend(&quot;bottomright&quot;, legend = c(&quot;Empirical Coverage&quot;, &quot;Nominal 95%&quot;),
+       col = c(&quot;blue&quot;, &quot;red&quot;), lty = c(1, 2), pch = c(19, NA), lwd = 2)</code></pre>
+<p><img src="figure/chapter4.rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>We could also double check how does the estimated error variance
+changes with <span class="math inline">\(K\)</span>, which was suggested
+by the author as a way to pick the number of basis functions <span
+class="math inline">\(K\)</span>.</p>
+<pre class="r"><code># Function to estimate residual variance for a given K
+estimate_sigma2 &lt;- function(data, K) {
+  # Design matrix and smoothing matrix
+  Phi &lt;- obtain_design(data, K)
+  S &lt;- Phi %*% solve(t(Phi) %*% Phi) %*% t(Phi)
+  
+  # Fitted values
+  yhat &lt;- as.vector(S %*% data$y)
+  
+  # Degrees of freedom = trace(S)
+  df &lt;- sum(diag(S))
+  
+  # Residual sum of squares
+  rss &lt;- sum((data$y - yhat)^2)
+  
+  # Estimated sigma^2
+  sigma2_hat &lt;- rss / (nrow(data) - df)
+  
+  return(sigma2_hat)
+}
+
+# Vector of K values to test
+K_values &lt;- seq(5, 50, by = 5)
+
+# Compute estimated sigma^2 for each K
+sigma2_values &lt;- sapply(K_values, function(K) estimate_sigma2(data_sim, K))
+
+# Plot
+plot(K_values, sigma2_values, type = &quot;b&quot;, pch = 19, col = &quot;darkgreen&quot;,
+     xlab = &quot;Number of Basis Functions (K)&quot;, 
+     ylab = &quot;Estimated Error Variance&quot;,
+     main = &quot;Estimated Error Variance vs Number of Basis Functions&quot;)</code></pre>
+<p><img src="figure/chapter4.rmd/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Based on the figure, it seems like <span class="math inline">\(K =
+20\)</span> is indeed a good choice to balance the bias-variance
+trade-off. After <span class="math inline">\(K = 20\)</span>, the
+estimated error no longer seems to decrease significantly, which
+suggests that the model is not improving much with more complexity.</p>
+</div>
+</div>
+<div id="localized-least-squares" class="section level2">
+<h2><strong>Localized Least Squares</strong></h2>
+<p>Finally, the author closed the chapter with a discussion on localized
+least squares.</p>
+<div id="kernel-smoothing" class="section level3">
+<h3><strong>Kernel Smoothing</strong></h3>
+<p>The idea of smoothing is that the estimate of <span
+class="math inline">\(\hat{x}(t_i)\)</span> should not depend solely on
+the observed data at <span class="math inline">\(t_i\)</span> (e.g.,
+<span class="math inline">\(y_i\)</span>), but should also take into
+account the <strong>nearby</strong> observations.</p>
+<p>If we use a <strong>point-interpolation smoother</strong>, we only
+use the observation at <span class="math inline">\(t_i\)</span> to
+estimate <span class="math inline">\(\hat{x}(t_i)\)</span>, resulting in
+a highly non-smooth estimate.</p>
+<p>If we use the <strong>sample mean smoother</strong>, we use all
+observations equally to estimate <span
+class="math inline">\(\hat{x}(t_i)\)</span>, resulting in an overly
+smooth estimate that may fail to capture the local structure of the
+data.</p>
+<p>An ideal linear smoother should assign weights <span
+class="math inline">\(S_j(t_i)\)</span> such that:</p>
+<p><span class="math display">\[
+\hat{x}(t_i) = \sum_{j=1}^n S_j(t_i) y_j,
+\]</span></p>
+<p>where <span class="math inline">\(S_j(t_i)\)</span> is a weight that
+depends on the distance between <span class="math inline">\(t_i\)</span>
+and <span class="math inline">\(t_j\)</span>.</p>
+<p>The <strong>kernel smoother</strong> is a compromise between these
+two extremes.<br />
+It uses a <strong>kernel function</strong> <span
+class="math inline">\(\text{Kern}(\cdot)\)</span> to weight the
+contributions of nearby observations when estimating <span
+class="math inline">\(\hat{x}(t_i)\)</span>. The kernel function is a
+non-negative function with most of its mass concentrated around zero,
+and it gradually decays to zero as the distance increases.<br />
+Typically, the kernel function is symmetric, meaning <span
+class="math inline">\(\text{Kern}(t) = \text{Kern}(-t)\)</span>.<br />
+It is also usually paired with a <strong>bandwidth</strong> parameter
+<span class="math inline">\(h\)</span> that controls the width of the
+kernel and determines how much weight is given to observations at
+different distances.</p>
+<p>Using kernel functions, we could construct more flexible linear
+smoothers that adapt to the local structure of the data. For example,
+the <strong>Nadaraya–Watson kernel smoother</strong> is defined as:
+<span class="math display">\[
+S_j(t_i) = \frac{\text{Kern}\left(\frac{t_i -
+t_j}{h}\right)}{\sum_{k=1}^n \text{Kern}\left(\frac{t_i -
+t_k}{h}\right)}.
+\]</span></p>
+<p>Here are some illustrations of applying NW kernel smoother:</p>
+<pre class="r"><code># Define a function to generate the smoother matrix S
+generate_nw_smoother_matrix &lt;- function(t_obs, h, kernel_func) {
+  n &lt;- length(t_obs)
+  S &lt;- matrix(0, nrow = n, ncol = n)
+  
+  for (i in 1:n) {
+    weights &lt;- kernel_func((t_obs[i] - t_obs) / h)
+    weights &lt;- weights / sum(weights)
+    S[i, ] &lt;- weights
+  }
+  
+  return(S)
+}</code></pre>
+<p>First, consider an example with a Gaussian kernel with bandwidth
+<span class="math inline">\(h = 0.2\)</span>.</p>
+<pre class="r"><code># Gaussian kernel
+gaussian_kernel &lt;- function(u) dnorm(u)
+
+# Create smoother matrix with Gaussian kernel and h = 0.2
+S_gaussian &lt;- generate_nw_smoother_matrix(data_sim$t, h = 0.2, kernel_func = gaussian_kernel)
+
+# Compute fitted values
+yhat_gaussian &lt;- as.vector(S_gaussian %*% data_sim$y)
+
+plot(data_sim$t, data_sim$y, pch = 19, col = &quot;grey&quot;, 
+     ylab = &quot;Observed Data&quot;, xlab = &quot;t&quot;,
+     main = &quot;Nadaraya-Watson Kernel Smoother (Gaussian Kernel, h=0.2)&quot;)
+lines(data_sim$t, yhat_gaussian, col = &quot;red&quot;, lwd = 2)</code></pre>
+<p><img src="figure/chapter4.rmd/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Let’s take a look at the EDF of this smoother:</p>
+<pre class="r"><code>sum(diag(S_gaussian))</code></pre>
+<pre><code>[1] 20.59767</code></pre>
+<p>Let’s also consider the bandwidth of <span class="math inline">\(h =
+0.5\)</span> and <span class="math inline">\(h = 0.1\)</span>:</p>
+<pre class="r"><code>S_gaussian_h05 &lt;- generate_nw_smoother_matrix(data_sim$t, h = 0.5, kernel_func = gaussian_kernel)
+yhat_gaussian_h05 &lt;- as.vector(S_gaussian_h05 %*% data_sim$y)
+S_gaussian_h01 &lt;- generate_nw_smoother_matrix(data_sim$t, h = 0.1, kernel_func = gaussian_kernel)
+yhat_gaussian_h01 &lt;- as.vector(S_gaussian_h01 %*% data_sim$y)
+plot(data_sim$t, data_sim$y, pch = 19, col = &quot;grey&quot;, 
+     ylab = &quot;Observed Data&quot;, xlab = &quot;t&quot;,
+     main = &quot;Nadaraya-Watson Kernel Smoother (Gaussian Kernel)&quot;)
+lines(data_sim$t, yhat_gaussian_h05, col = &quot;red&quot;, lwd = 2, lty = 1)
+lines(data_sim$t, yhat_gaussian_h01, col = &quot;blue&quot;, lwd = 2, lty = 2)
+lines(data_sim$t, yhat_gaussian, col = &quot;green&quot;, lwd = 3, lty = 3)
+lines(data_sim$t, x_fun(data_sim$t), col = &quot;black&quot;, lwd = 2, lty = 4)
+legend(&quot;topright&quot;,
+       legend = c(&quot;Observed Data&quot;, &quot;h=0.5&quot;, &quot;h=0.1&quot;, &quot;h=0.2&quot;, &quot;True Function&quot;),
+       col = c(&quot;grey&quot;, &quot;red&quot;, &quot;blue&quot;, &quot;green&quot;, &quot;black&quot;),
+       pch = c(19, NA, NA, NA, NA),
+       lwd = c(NA, 2, 2, 2, 2),
+       lty = c(NA, 1, 2, 3, 4),
+       bg = &quot;white&quot;)</code></pre>
+<p><img src="figure/chapter4.rmd/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Let’s compare their EDF:</p>
+<pre class="r"><code>edf_gaussian_h05 &lt;- sum(diag(S_gaussian_h05))
+edf_gaussian_h01 &lt;- sum(diag(S_gaussian_h01))
+edf_gaussian &lt;- sum(diag(S_gaussian))
+plot(c(0.1, 0.2, 0.5), c(edf_gaussian_h01, edf_gaussian, edf_gaussian_h05), 
+     type = &quot;b&quot;, pch = 19, col = &quot;blue&quot;,
+     xlab = &quot;Bandwidth (h)&quot;, 
+     ylab = &quot;Effective Degrees of Freedom (EDF)&quot;,
+     main = &quot;EDF of Nadaraya-Watson Kernel Smoother&quot;)</code></pre>
+<p><img src="figure/chapter4.rmd/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>What if we change the kernel function to a uniform kernel?</p>
+<pre class="r"><code>h_vector &lt;- c(0.1, 0.2, 0.5)
+uniform_kernel &lt;- function(u) {
+  ifelse(abs(u) &lt;= 1, 0.5, 0)
+}
+S_uniform &lt;- lapply(h_vector, function(h) generate_nw_smoother_matrix(data_sim$t, h, uniform_kernel))
+yhat_uniform &lt;- lapply(S_uniform, function(S) as.vector(S %*% data_sim$y))
+plot(data_sim$t, data_sim$y, pch = 19, col = &quot;grey&quot;, 
+     ylab = &quot;Observed Data&quot;, xlab = &quot;t&quot;,
+     main = &quot;Nadaraya-Watson Kernel Smoother (Uniform Kernel)&quot;)
+for (i in seq_along(h_vector)) {
+  lines(data_sim$t, yhat_uniform[[i]], col = i + 1, lwd = 3, lty = i)
+}
+legend(&quot;topright&quot;,
+       legend = c(&quot;Observed Data&quot;, paste0(&quot;h=&quot;, h_vector)),
+       col = c(&quot;grey&quot;, 2:4),
+       pch = c(19, NA, NA, NA),
+       lwd = c(NA, 2, 2, 2),
+       lty = 1:length(h_vector),
+       bg = &quot;white&quot;)</code></pre>
+<p><img src="figure/chapter4.rmd/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Let’s compare their EDF:</p>
+<pre class="r"><code>edf_uniform &lt;- sapply(S_uniform, function(S) sum(diag(S)))
+plot(h_vector, edf_uniform, 
+     type = &quot;b&quot;, pch = 19, col = &quot;blue&quot;,
+     xlab = &quot;Bandwidth (h)&quot;, 
+     ylab = &quot;Effective Degrees of Freedom (EDF)&quot;,
+     main = &quot;EDF of Nadaraya-Watson Kernel Smoother (Uniform Kernel)&quot;)</code></pre>
+<p><img src="figure/chapter4.rmd/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="local-polynomial-smoothing" class="section level3">
+<h3><strong>Local Polynomial Smoothing</strong></h3>
+<p>Finally, the author established the connection between kernel
+smoothing and local polynomial smoothing.</p>
+<p>Note that in the original OLS problem, the regression coefficients
+<span class="math inline">\(\boldsymbol{c}\)</span> are fitted globally
+over the entire domain. In contrast, using the kernel function, we could
+define a local cost function at each specific point <span
+class="math inline">\(t\)</span>, which wieghts the contributions of
+nearby observations more heavily than distant ones.</p>
+<p>For example, at a given point <span class="math inline">\(t\)</span>,
+we could define the local cost function as: <span
+class="math display">\[
+l_t(\boldsymbol{c}) = \sum_{j=1}^n \text{Kern}\left(\frac{t -
+t_j}{h}\right) (y_j - \boldsymbol{\phi}(t_j)&#39;\boldsymbol{c})^2,
+\]</span> where <span
+class="math inline">\(\boldsymbol{\phi}(t_j)\)</span> is the vector of
+basis functions evaluated at <span
+class="math inline">\(t_j\)</span>.</p>
+<p>The estimated coefficients <span
+class="math inline">\(\hat{\boldsymbol{c}}(t)\)</span> will have the
+form of the WLS estimate: <span class="math display">\[
+\hat{\boldsymbol{c}}(t) =
+[\mathbf{\Phi}&#39;\mathbf{W}(t)\mathbf{\Phi}]^{-1}
+\mathbf{\Phi}&#39;\mathbf{W}(t)\boldsymbol{y},
+\]</span> where <span class="math inline">\(\mathbf{W}(t)\)</span> has
+diagonal elements being <span class="math display">\[
+\mathbf{W}_{ii}(t) = \text{Kern}\left(\frac{t - t_i}{h}\right).
+\]</span></p>
+<p>Therefore, the smoothing matrix <span
+class="math inline">\(\mathbf{S}\)</span> can be expressed as:</p>
+<p><span class="math display">\[
+\mathbf{S} =
+\begin{bmatrix}
+\boldsymbol{\phi}(t_1)&#39;[\mathbf{\Phi}&#39;\mathbf{W}(t_1)\mathbf{\Phi}]^{-1}\mathbf{\Phi}&#39;\mathbf{W}(t_1)
+\\
+\boldsymbol{\phi}(t_2)&#39;[\mathbf{\Phi}&#39;\mathbf{W}(t_2)\mathbf{\Phi}]^{-1}\mathbf{\Phi}&#39;\mathbf{W}(t_2)
+\\
+\vdots \\
+\boldsymbol{\phi}(t_n)&#39;[\mathbf{\Phi}&#39;\mathbf{W}(t_n)\mathbf{\Phi}]^{-1}\mathbf{\Phi}&#39;\mathbf{W}(t_n)
+\end{bmatrix},
+\]</span> such that</p>
+<p><span class="math display">\[
+\hat{\boldsymbol{y}} =
+\begin{bmatrix}
+\boldsymbol{\phi}(t_1)&#39; \hat{\boldsymbol{c}}(t_1) \\
+\boldsymbol{\phi}(t_2)&#39; \hat{\boldsymbol{c}}(t_2) \\
+\vdots \\
+\boldsymbol{\phi}(t_n)&#39; \hat{\boldsymbol{c}}(t_n)
+\end{bmatrix} = \mathbf{S}\boldsymbol{y}.
+\]</span></p>
+</div>
+<div id="loess" class="section level3">
+<h3><strong>LOESS</strong></h3>
+<p>Here we illustrate the idea of local polynomial smoothing using the
+built-in <code>loess</code> function in R.<br />
+By default, <code>loess()</code> fits a <strong>local quadratic
+smoother</strong> (<em>degree = 2</em>) with a <strong>tri-cube
+kernel</strong>.</p>
+<p>We can adjust the bandwidth through the <code>span</code> parameter,
+and also change the degree of the local polynomial using the
+<code>degree</code> parameter.</p>
+<pre class="r"><code># Fit LOESS model with typical span
+loess_fit &lt;- loess(y ~ t, data = data_sim, span = 0.1, degree = 2)
+summary(loess_fit)</code></pre>
+<pre><code>Call:
+loess(formula = y ~ t, data = data_sim, span = 0.1, degree = 2)
+
+Number of Observations: 100 
+Equivalent Number of Parameters: 28.59 
+Residual Standard Error: 0.4605 
+Trace of smoother matrix: 31.57  (exact)
+
+Control settings:
+  span     :  0.1 
+  degree   :  2 
+  family   :  gaussian
+  surface  :  interpolate     cell = 0.2
+  normalize:  TRUE
+ parametric:  FALSE
+drop.square:  FALSE </code></pre>
+<p>Take a look at its fitted curve:</p>
+<pre class="r"><code># Get fitted values on a dense grid
+t_grid &lt;- seq(0, 20, length.out = 200)
+yhat_loess &lt;- predict(loess_fit, newdata = data.frame(t = t_grid))
+
+# Plot
+plot(data_sim$t, data_sim$y, pch = 19, col = &quot;grey&quot;, 
+     ylab = &quot;Observed Data&quot;, xlab = &quot;t&quot;,
+     main = &quot;LOESS Smoothing&quot;)
+lines(t_grid, yhat_loess, col = &quot;red&quot;, lwd = 2)
+lines(t_grid, x_fun(t_grid), col = &quot;blue&quot;, lwd = 2, lty = 2)
+legend(&quot;topright&quot;,
+       legend = c(&quot;Observed Data&quot;, &quot;LOESS Fit&quot;, &quot;True Function&quot;),
+       col = c(&quot;grey&quot;, &quot;red&quot;, &quot;blue&quot;),
+       pch = c(19, NA, NA),
+       lty = c(NA, 1, 2),
+       lwd = 2,
+       bg = &quot;white&quot;)</code></pre>
+<p><img src="figure/chapter4.rmd/unnamed-chunk-21-1.png" width="672" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Monterey 12.7.4
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: America/Chicago
+tzcode source: internal
+
+attached base packages:
+[1] splines   stats     graphics  grDevices utils     datasets  methods  
+[8] base     
+
+other attached packages:
+[1] fda_6.2.0       deSolve_1.40    fds_1.8         RCurl_1.98-1.16
+[5] rainbow_3.8     pcaPP_2.0-5     MASS_7.3-60     workflowr_1.7.1
+
+loaded via a namespace (and not attached):
+ [1] ks_1.14.3          sass_0.4.10        bitops_1.0-9       KernSmooth_2.23-24
+ [5] stringi_1.8.7      lattice_0.22-6     hdrcde_3.4         pracma_2.4.4      
+ [9] digest_0.6.37      magrittr_2.0.3     evaluate_1.0.3     grid_4.3.1        
+[13] mvtnorm_1.3-1      fastmap_1.2.0      rprojroot_2.0.4    jsonlite_2.0.0    
+[17] Matrix_1.6-4       processx_3.8.6     whisker_0.4.1      mclust_6.1.1      
+[21] ps_1.9.1           promises_1.3.3     httr_1.4.7         jquerylib_0.1.4   
+[25] cli_3.6.5          rlang_1.1.6        cachem_1.1.0       yaml_2.3.10       
+[29] tools_4.3.1        colorspace_2.1-1   httpuv_1.6.16      vctrs_0.6.5       
+[33] R6_2.6.1           lifecycle_1.0.4    git2r_0.33.0       stringr_1.5.1     
+[37] fs_1.6.6           cluster_2.1.6      pkgconfig_2.0.3    callr_3.7.6       
+[41] pillar_1.10.2      bslib_0.9.0        later_1.4.2        glue_1.8.0        
+[45] Rcpp_1.0.14        xfun_0.52          tibble_3.2.1       rstudioapi_0.16.0 
+[49] knitr_1.50         htmltools_0.5.8.1  rmarkdown_2.28     compiler_4.3.1    
+[53] getPass_0.2-4     </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
