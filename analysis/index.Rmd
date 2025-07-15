@@ -8,4 +8,9 @@ editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website.
+This is the home page of the 2025 Reading group of the book **Functional Data Analysis** by Ramsay.
+The books is avaliable online at this [link](https://link.springer.com/book/10.1007/b98888).
+
+Below are the summaries of the chapters we have read so far. The summaries are written by the participants of the reading group.
+
++ [Chapter 4: Smoothing functional data by least squares.](chapter4.html)

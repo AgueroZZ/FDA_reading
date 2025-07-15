@@ -1,14 +1,13 @@
 name: "FDA_reading"
 output_dir: ../docs
 navbar:
-  title: "FDA_reading"
+  title: "FDA Reading Group"
   left:
-  - text: Home
-    href: index.html
-  - text: About
-    href: about.html
-  - text: License
-    href: license.html
+    - text: Overview
+      href: index.html
+  right:
+    - text: source
+      href: https://github.com/AgueroZZ/FDA_reading
 output:
   workflowr::wflow_html:
     toc: yes
