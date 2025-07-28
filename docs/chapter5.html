@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>chapter5</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">FDA Reading Group</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Overview</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/AgueroZZ/FDA_reading">source</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">chapter5</h1>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2025-07-28
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>FDA_reading/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20250713code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20250713)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20250713code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20250713)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomAgueroZZFDAreadingtreee55081d7aed8b1d61d11480094e528735dea264ctargetblanke55081da">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/AgueroZZ/FDA_reading/tree/e55081d7aed8b1d61d11480094e528735dea264c" target="_blank">e55081d</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomAgueroZZFDAreadingtreee55081d7aed8b1d61d11480094e528735dea264ctargetblanke55081da"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/AgueroZZ/FDA_reading/tree/e55081d7aed8b1d61d11480094e528735dea264c" target="_blank">e55081d</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  analysis/fft.Rmd
+
+Unstaged changes:
+    Modified:   FDA_reading.Rproj
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/chapter5.Rmd</code>) and HTML
+(<code>docs/chapter5.html</code>) files. If you’ve configured a remote
+Git repository (see <code>?wflow_git_remote</code>), click on the
+hyperlinks in the table below to view the files as they were in that
+past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/AgueroZZ/FDA_reading/blob/e55081d7aed8b1d61d11480094e528735dea264c/analysis/chapter5.Rmd" target="_blank">e55081d</a>
+</td>
+<td>
+Karl Tayeb
+</td>
+<td>
+2025-07-28
+</td>
+<td>
+wflow_git_commit("analysis/chapter5.Rmd")
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="chapter-summary" class="section level2">
+<h2>Chapter Summary</h2>
+<p>This chapter is concerned with roughness penalized smoothing.</p>
+<p>In section 5.2 the roughness penalty is introduced in the context of
+penalizing spline smoothing (although the ideas are more broadly
+applicable to basis expansions that yield suitably differentiable
+functions). The idea is to place a penalty on the norm of the derivative
+(5.2.2). <span class="math inline">\(\text{PEN}_2(x) = \int [D^2 x(s)]^2
+ds = ||D^2x||^2\)</span> (5.2.2). Although, importantly, it turns out
+that e.g. the optimal twice differentiable function estimated using the
+roughness penalty is a cubic spline (5.2.4). The linear algebra for
+computing spline smooths and penalized spline smooths is reviewed
+(5.2.5). And attention is drawn to the fact that spline smoothing is
+linear in the observations <span class="math inline">\({\bf y}\)</span>
+This allows us to compute degrees of freedom (5.2.6). The penalized
+least squares problem is related to a data-augmented least squared,
+which offers some numerical advantage (5.2.7). Finally, derivative
+estimation is discussed (5.2.8)</p>
+<p>In section 5.3, extentions and modifications of the basic roughness
+penalized spline smoothing are discussed such as reducing the number of
+knots/basis functions (5.3.1), replacing the data fit with a negtive
+log-likelihood or some other measure of data fit (5.3.2), or developing,
+and even estimating more general roughness penalties of the form <span
+class="math inline">\(Lx = \sum_{k=0}^m w_k D^k x\)</span> (5.3.3). Some
+considertion is given to the details of computing/approximating the
+penalty matrix <span class="math inline">\(R\)</span> (5.3.4).</p>
+<p>Section 5.4 is concerned with choosing the smoothing parameter <span
+class="math inline">\(\lambda\)</span>. First, a dimensional analysis
+and some rules of for practical settings of <span
+class="math inline">\(\lambda\)</span> are discussed. This leads to a
+“dimensionless” reparameterization of the roughness penalty criterion is
+provided (5.4.1). Leave-one-out cross validation (5.4.2) and generalized
+cross validation are discussed, as well as strategies for efficient
+optimization of the generalized cross validation criterion (5.4.3).
+These concepts are explored in their application to simulated growth
+data (5.4.4).</p>
+<p>Section 5.5 discusses computing point-wise confidence intervals for
+function values, and sets this in the more general setting of functional
+probes. Linear functional probes are introduced as a means of
+interrogating features of a function. The evaluation map is introduced
+as a specific linear probe (5.5.1). For linear smooths of the data, the
+sampling behavior of linear probes can be studied by composing maps from
+data to basis coefficients, and coefficients to probe evaluation
+(5.5.2). These computations are carried out in more detail for the
+evaluation map (5.5.3) These confidence limits are applied to
+acceleration of the growth data (5.5.4).</p>
+<p>Section 5.6 proposed penalizing a subset of the basis functions. The
+notion of complimentary bases is introduced, splitting <span
+class="math inline">\(x = x_S + x_R\)</span> where <span
+class="math inline">\(x_S\)</span> and <span
+class="math inline">\(x_R\)</span> are “smooth” and “rough” parts of the
+function each with their own basis (5.6.1). Some options for roughness
+penalties on <span class="math inline">\(x_R\)</span> are discusse, as
+well as the linear algebra for estimating coefficients in the
+complementary bases (5.6.2). Som preperties of the estimates are
+discussed (5.6.3).</p>
+<p>Section numbers correspond with those in the book, but their names
+vary based on what I was emphasizing. Notation also varies slightly from
+the book, mostly in the direction of making more explicit which basis,
+penalty, etc, are being used (e.g. writing <span
+class="math inline">\(\hat {\bf c}_{\phi, \lambda, 2}\)</span> instead
+of just <span class="math inline">\(\hat{\bf c}\)</span>.</p>
+</div>
+<div id="spline-smoothing" class="section level2">
+<h2>5.2 Spline smoothing</h2>
+<p>The term “spline smoothing”, for the purposes of this book, is
+reserved for fitting splines with roughness penalties as described here,
+rather than fitting by least squares.</p>
+<div id="roughness-penalties" class="section level3">
+<h3>5.2.2 Roughness penalties</h3>
+<p>For <span class="math inline">\(x\)</span> twice differentiable, with
+integrable second derivative</p>
+<p><span class="math display">\[
+\text{PEN}_2(x) = \int [D^2 x(s)]^2 ds = ||D^2x||^2
+\]</span> If the curvature is large in some part of <span
+class="math inline">\(x\)</span>, <span
+class="math inline">\(\text{PEN}_2\)</span> will be large.</p>
+<p>more generall we can have a roughness penalty</p>
+<p><span class="math display">\[
+\text{PEN}_m(x) = \int [D^m x(s)]^2 ds = ||D^m x||^2
+\]</span></p>
+</div>
+<div id="the-penalized-sum-of-squares-criterion" class="section level3">
+<h3>5.2.3 The penalized sum of squares criterion</h3>
+<p><span class="math display">\[
+\text{PENSSE}_\lambda (x | {\bf y}) = [y - x({\bf t})]^T W[y-x({\bf t})]
++ \lambda \int [D^2 x(s)]^2 ds
+\]</span></p>
+</div>
+<div id="the-structure-of-a-smoothing-spline" class="section level3">
+<h3>5.2.4 The structure of a smoothing spline</h3>
+<p>Let <span class="math inline">\(\mathcal D_2\)</span> be the set of
+twice differentiable functions.</p>
+<p><span class="math display">\[
+x^* = \arg\min_{x \in \mathcal D_2} \text{PENSSE}_\lambda(x | {\bf y})
+\]</span> <strong>Theorem (de Boor, 2002)</strong>: <span
+class="math inline">\({\bf t} = (t_1, \dots, t_n)\)</span> distinct,
+then <span class="math inline">\(x^*\)</span> is a cubic spline with
+knots at <span class="math inline">\({\bf t}\)</span>.</p>
+<p>Smoothing splines adapt naturally to unequally spaced points. Where
+data sampling is high you get more flexibility.</p>
+<p>The canonical version of <strong>spline smoothing</strong>: order 4
+<span class="math inline">\(B\)</span>-spline basis expansion with knots
+at the sampling points, minimizing <span
+class="math inline">\(\text{PENSSE}_\lambda\)</span>.</p>
+</div>
+<div id="computing-smooths-linear-operator" class="section level3">
+<h3>5.2.5-6 Computing smooths, linear operator</h3>
+<div id="review" class="section level4">
+<h4>Review</h4>
+<p>Recall that minimizing <span
+class="math inline">\(\text{SSE}\)</span> in the basis expansion</p>
+<p><span class="math display">\[
+x(t) = \langle {\bf c},  {\mathbf{\phi}}(t)\rangle
+\]</span></p>
+<p>The estimated coefficients are</p>
+<p><span class="math display">\[
+\hat c = (\Phi^T W \Phi)^{-1} \Phi^TW^T{\bf y}.
+\]</span></p>
+<p>The smoothed estimates are linear in <span class="math inline">\({\bf
+y}\)</span>:</p>
+<p><span class="math display">\[
+\hat{\bf y} = S_\phi {\bf y}, \;\; S_\phi = \Phi(\Phi^T W \Phi)^{-1}
+\Phi^T W^T.
+\]</span></p>
+</div>
+<div id="rewriting-the-roughness-penalty" class="section level4">
+<h4>Rewriting the roughness penalty</h4>
+<p>We rewrite the roughness penalty in terms of the coefficients <span
+class="math inline">\({\bf c}\)</span> in the basis expansion. The key
+here is that the penalty is quadratic in <span
+class="math inline">\({\bf c}\)</span></p>
+<p><span class="math display">\[
+\begin{aligned}
+\text{PEN}_m(x)
+&amp;= \int [D^m x(s)]^2 ds \\
+&amp;= \int [D^m \langle {\bf c}, \phi(s) \rangle]^2 ds \\
+&amp;= \int [\langle {\bf c}, D^m \phi(s) \rangle]^2 ds \\
+&amp;= \int {\bf c}^T D^m \phi(s)D^m \phi^T(s) {\bf c}   ds \\
+&amp;= {\bf c}^T \left[\int  D^m \phi(s)D^m \phi^T(s)  ds \right] {\bf
+c} \\
+&amp;= {\bf c^T} R_m {\bf c}.
+\end{aligned}
+\]</span></p>
+<p><span class="math display">\[
+\text{PENSSE}_m({\bf c} | {\bf y}) = ({\bf y} - \Phi {\bf c})^T W ({\bf
+y} - \Phi {\bf c}) + \lambda {\bf c}^T R_m {\bf c}
+\]</span></p>
+<p>Taking the derivative and solving for stationary points we obtain</p>
+<p><span class="math display">\[
+\hat{\bf c}_{\phi, \lambda} = (\Phi^T W \Phi + \lambda R)^{-1} \Phi^T W
+{\bf y},
+\]</span></p>
+<p>where <span class="math inline">\(R = R_2\)</span>.</p>
+<p>As before the smoothed estimates are linear in <span
+class="math inline">\({\bf y}\)</span></p>
+<p><span class="math display">\[
+\begin{aligned}
+\hat {\bf y}_\lambda
+&amp;= \Phi \hat c_{\phi, \lambda} \\
+&amp;= (\Phi^T W \Phi + \lambda R)^{-1} \Phi^T W {\bf y} \\
+&amp;= S_{\phi, \lambda} {\bf y}
+\end{aligned}
+\]</span></p>
+<p>Note that unlike before, <span class="math inline">\(S_{\phi,
+\lambda}\)</span> is no longer a projection matrix, as the least squares
+smooth <span class="math inline">\(S_\phi = S_{\phi, 0}\)</span> is.</p>
+<p>We can take the second derivatives of the basis functions and arrange
+them in a matrix <span class="math inline">\(\Phi^{(2)}\)</span>, then
+the estimates of the second derivatives are also linear in <span
+class="math inline">\({\bf y}\)</span>:</p>
+<p><span class="math display">\[
+\hat {\bf y}^{(2)}_\lambda = \Phi^{(2)} \hat {\bf c}_{\phi, \lambda} =
+S_{\phi, \lambda}^{(2)}{\bf y}.
+\]</span></p>
+<p><span class="math display">\[
+\text{df}(\lambda) = \text{trace} S_{\phi, \lambda}
+\]</span></p>
+<p>Note: <span class="math inline">\(\lambda \rightarrow 0\)</span>
+yields the minimum norm</p>
+</div>
+</div>
+<div id="spline-smoothing-as-augmented-least-squares"
+class="section level3">
+<h3>5.2.7 Spline smoothing as augmented least squares</h3>
+<p>In ridge regression and other regularized regression settings, the
+penalty or prior can be conceptualized as adding “dummy data” to the
+model. In this context, the dummy observations are set to zero, and the
+influence of these observations is controlled by the penalty parameter .
+This is reflected in the augmented matrices:</p>
+<p><span class="math display">\[
+\tilde {\bf y} = \begin{bmatrix}{\bf y} \\ 0\end{bmatrix}, \tilde \Phi =
+\begin{bmatrix}\Phi \\ \sqrt{\lambda} L\end{bmatrix}, \tilde W =
+\begin{bmatrix}W &amp; 0 \\ 0 &amp; I_K\end{bmatrix}
+\]</span></p>
+<p>where <span class="math inline">\(R = L^T L\)</span>. Then, minimizng
+least squares in the augmented problem is equivalent to minimizing <span
+class="math inline">\({\bf c}\)</span> in our penalized problem.</p>
+<p><span class="math display">\[
+\arg\min_c \text{SSE}(\tilde {\bf y} | {\bf c}) = \arg\min_c
+\text{PENSSE}_\lambda ({\bf y} | {\bf c})
+\]</span> Solving the augmented least squares problem via QR
+decomposition introduces less rounding error than direct optimization of
+the penalized criterion.</p>
+</div>
+<div id="estimating-derivatives-by-spline-smoothing"
+class="section level3">
+<h3>5.2.8 Estimating derivatives by spline smoothing</h3>
+<p>If we want to estimate order <span class="math inline">\(m\)</span>
+derivatives, we should penalize <span class="math inline">\(||D^{m+2}
+x||^2\)</span>, to control the curvatures of the highest order
+derivative.</p>
+<p>Using order 5 <span class="math inline">\(B\)</span>-splines, we can
+compare the least squares estimate the the</p>
+<pre class="r"><code>library(fda)</code></pre>
+<pre><code>Loading required package: splines</code></pre>
+<pre><code>Loading required package: fds</code></pre>
+<pre><code>Loading required package: rainbow</code></pre>
+<pre><code>Loading required package: MASS</code></pre>
+<pre><code>Loading required package: pcaPP</code></pre>
+<pre><code>Loading required package: RCurl</code></pre>
+<pre><code>Loading required package: deSolve</code></pre>
+<pre><code>
+Attaching package: &#39;fda&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:graphics&#39;:
+
+    matplot</code></pre>
+<pre class="r"><code># True function, acceleration
+x_fun &lt;- function(x) sin(2.5 * x) + cos(0.9 * x)
+x_accel &lt;- function(x) -(sin(2.5 * x) * 2.5**2 + cos(0.9 * x) * 0.9**2)
+
+# Simulate n data from the regression model
+simulate_data &lt;- function(n, sigma = 0.2, seed = 123) {
+  set.seed(seed)
+  t &lt;- seq(0, 10, length.out = n)
+  y &lt;- x_fun(t) + rnorm(n, 0, sigma)
+  data.frame(t = t, y = y)
+}
+
+data &lt;- simulate_data(50)
+
+# select observations to be knots according to strategy p98 
+# to make number of basis functions equal number of sample points
+get_knots &lt;- function(t, order){
+  # drop order - 2 knots from the end
+  # e.g. for order = 4, drop two points
+  # (t1, t2, ... ,t_n-1, t_n) -&gt; (t1, t3, ..., t_n-2, t_n)
+  num_to_drop &lt;- order - 2
+  # Create a sequence of indices to keep
+  indices_to_keep &lt;- c(1, seq(ceiling(num_to_drop/2) + 2, length(t) - floor(num_to_drop/2) - 1), length(t))
+  return(t[indices_to_keep])
+}
+
+plot_x_and_acceleration &lt;- function(norder, lambda, m){
+  # compute basis
+  basis &lt;- create.bspline.basis(
+    rangeval = range(data$t),
+    breaks = get_knots(data$t, norder),
+    norder = norder
+  )
+  
+  # compute coefficients
+  R &lt;- bsplinepen(basis, Lfdobj = m)
+  Phi &lt;- bsplineS(data$t, get_knots(data$t, norder), norder=norder)
+  hatc &lt;- solve(t(Phi) %*% Phi + lambda * R, t(Phi) %*% data$y)
+  
+  # compute 
+  t2 &lt;- seq(min(data$t), max(data$t), length.out=100)
+  S &lt;- bsplineS(t2, get_knots(data$t, norder), norder=norder)
+  smoothed_values &lt;- S %*% hatc
+  S2 &lt;- bsplineS(t2, get_knots(data$t, norder), norder=norder, nderiv = 2)
+  smoothed_accel &lt;- S2 %*% hatc
+  
+  par(mfrow=c(1,2))
+  
+  # Plot the true function
+  plot(t2, x_fun(t2), type = &quot;l&quot;, lty = 2, col = &quot;black&quot;, lwd = 2, 
+       xlab = &quot;t&quot;, ylab = &quot;Function Values&quot;, main = &quot;x&quot;)
+       
+  # Add the observed values
+  points(data$t, data$y, col = &quot;red&quot;, pch = 16)
+  
+  # Add the estimated function
+  lines(t2, smoothed_values, col = &quot;black&quot;, lwd = 2)
+  
+  # Plot for acceleration (assuming &#39;x_accel(t2)&#39; and &#39;smoothed_accel&#39; are defined)
+  # Example acceleration data (replace with your actual data)
+  x_accel_t2 &lt;- x_accel(t2)  # Example true acceleration
+
+  # Plot the true acceleration
+  plot(t2, x_accel_t2, type = &quot;l&quot;, lty = 2, col = &quot;black&quot;, lwd = 2, 
+       xlab = &quot;t&quot;, ylab=&quot;&quot;, main = &quot;x&#39;&#39;&quot;)
+  
+  # Add the estimated acceleration
+  lines(t2, smoothed_accel, col = &quot;black&quot;, lwd = 2)
+  
+}</code></pre>
+<p>Here we look at order <span class="math inline">\(4\)</span>
+B-splines with a <span class="math inline">\(||D^2x||^2\)</span>
+penalty, at different settings of the penalty parameter ranging from
+under-smoothing to over smoothing. Note here that this penalty does not
+control the smoothness of <span
+class="math inline">\(x&#39;&#39;\)</span>.</p>
+<pre class="r"><code>plot_x_and_acceleration(
+  norder = 4, # order of B-splines
+  lambda &lt;- 0, # roughness penalty
+  m = 2 # roughness order
+)</code></pre>
+<p><img src="figure/chapter5.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plot_x_and_acceleration(
+  norder = 4, # order of B-splines
+  lambda &lt;- 0.001, # roughness penalty
+  m = 2 # roughness order
+)</code></pre>
+<p><img src="figure/chapter5.Rmd/unnamed-chunk-2-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plot_x_and_acceleration(
+  norder = 4, # order of B-splines
+  lambda &lt;- 0.01, # roughness penalty
+  m = 2 # roughness order
+)</code></pre>
+<p><img src="figure/chapter5.Rmd/unnamed-chunk-2-3.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plot_x_and_acceleration(
+  norder = 4, # order of B-splines
+  lambda &lt;- 0.1, # roughness penalty
+  m = 2 # roughness order
+)</code></pre>
+<p><img src="figure/chapter5.Rmd/unnamed-chunk-2-4.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plot_x_and_acceleration(
+  norder = 4, # order of B-splines
+  lambda &lt;- 1, # roughness penalty
+  m = 2 # roughness order
+)</code></pre>
+<p><img src="figure/chapter5.Rmd/unnamed-chunk-2-5.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Next we look at order <span class="math inline">\(6\)</span>
+B-splines with a <span class="math inline">\(||D^4x||^2\)</span>
+penalty, at different settings of the penalty parameter ranging from
+under-smoothing to over smoothing. Note here that this penalty does not
+control the smoothness of <span
+class="math inline">\(x&#39;&#39;\)</span>.</p>
+<pre class="r"><code>plot_x_and_acceleration(
+  norder = 6, # order of B-splines
+  lambda &lt;- 0., # roughness penalty
+  m = 4 # roughness order
+)</code></pre>
+<p><img src="figure/chapter5.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plot_x_and_acceleration(
+  norder = 6, # order of B-splines
+  lambda &lt;- 0.0001, # roughness penalty
+  m = 4 # roughness order
+)</code></pre>
+<p><img src="figure/chapter5.Rmd/unnamed-chunk-3-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plot_x_and_acceleration(
+  norder = 6, # order of B-splines
+  lambda &lt;- 0.001, # roughness penalty
+  m = 4 # roughness order
+)</code></pre>
+<p><img src="figure/chapter5.Rmd/unnamed-chunk-3-3.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plot_x_and_acceleration(
+  norder = 6, # order of B-splines
+  lambda &lt;- 0.01, # roughness penalty
+  m = 4 # roughness order
+)</code></pre>
+<p><img src="figure/chapter5.Rmd/unnamed-chunk-3-4.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plot_x_and_acceleration(
+  norder = 6, # order of B-splines
+  lambda &lt;- 0.1, # roughness penalty
+  m = 4 # roughness order
+)</code></pre>
+<p><img src="figure/chapter5.Rmd/unnamed-chunk-3-5.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="choosing-the-smoothing-parameter" class="section level2">
+<h2>5.4 Choosing the smoothing parameter</h2>
+<div id="section" class="section level3">
+<h3>5.4.1</h3>
+<p><span class="math display">\[
+M(\lambda) = \Phi^T W \Phi + \lambda R
+\]</span> The size of the elements of <span class="math inline">\(\Phi^T
+W \Phi\)</span> and <span class="math inline">\(R\)</span> may be of
+radically different sizes.</p>
+<p><span class="math display">\[
+||R|| = \sqrt{\sum_{k, l} r_{kl}^2}
+\]</span> increases roughly an order of magnitude in <span
+class="math inline">\(m\)</span> (the order of the roughness
+penalty)</p>
+<p><span class="math inline">\(R\)</span> is rank <span
+class="math inline">\(K-m\)</span>. If <span
+class="math inline">\(\lambda\)</span> is too large it will overwhelm
+the contribution of <span class="math inline">\(\Phi^T W \Phi\)</span>.
+<span class="math inline">\(\lambda R\)</span> should not be more than
+<span class="math inline">\(10^10\)</span> times the size of <span
+class="math inline">\(\Phi^T W \Phi\)</span>.</p>
+<p>Making the objective scale invariant. <span class="math display">\[
+\text{PENSSE}(x) = \frac{1}{n} ||{\bf y} - \hat {\bf y}||^2 + 10^\nu
+T^{2m-1} \text{PEN}_m(x)
+\]</span> - divide by <span class="math inline">\(n\)</span> to allow
+for scaling of the sample size - <span class="math inline">\(\nu =
+\log_{10} \lambda\)</span> - <span class="math inline">\(D^m x\)</span>
+has units <span class="math inline">\(u^m/t^m\)</span>. So its inner
+product is <span class="math inline">\(u^{2m}/t^{2m}\)</span>. After
+integration, <span class="math inline">\((u/t)^{2m-1}\)</span>, hence,
+<span class="math inline">\(T^{2m-1}\)</span> - <span
+class="math inline">\(T\)</span> is the length of the inverval. (2.3
+second, 2300 milliseconds)</p>
+</div>
+<div id="generalized-cross-validation" class="section level3">
+<h3>5.4.3 Generalized cross validation</h3>
+<p><span class="math display">\[
+\text{GCV}(\lambda) = \frac{n^{-1} \text{SSE}}{[n^{-1} \text{trace}(I -
+S_{\phi, \lambda})]^2} = \frac{n}{n - \text{df}(\lambda)} \times
+\frac{\text{SSE}}{n - \text{df}(\lambda)}
+\]</span></p>
+<ul>
+<li>twice discounted</li>
+<li>the first factor is an unbiased estimate of the error variance</li>
+<li>practically, the degrees of freedom are also inflated by a factor of
+<span class="math inline">\(1.2\)</span> to <span
+class="math inline">\(1.4\)</span> to further avoid under-smoothing,
+without seriously increasing the odds of over-smoothing.</li>
+</ul>
+<div
+id="efficient-computation-of-generalized-cross-validation-criterion"
+class="section level4">
+<h4>Efficient computation of generalized cross validation criterion</h4>
+<p><span class="math display">\[
+\text{SSE} = ||Y - \hat Y||^2 = ||Y(I - S_{\phi, \lambda})||^2 =
+\text{trace}(Y^T[I - S_{\phi, \lambda}]^{2} Y)
+\]</span></p>
+<p><span class="math display">\[
+S_{\phi, \lambda} = \Phi M(\lambda)^{-1} \Phi^T W, \;\; M(\lambda) =
+\Phi^T W \Phi + \lambda R
+\]</span></p>
+<p><strong>Generalized eigenvalue problem.</strong><br />
+<span class="math display">\[
+RV = \Phi^T W \Phi V D
+\]</span> <span class="math inline">\(D\)</span> is the diagonal matrix
+of eigenvalues of <span class="math inline">\(R\)</span> in the metric
+defied by <span class="math inline">\(\Phi^TW \Phi\)</span> and <span
+class="math inline">\(V\)</span>. The columns of <span
+class="math inline">\(V\)</span> are eigenvectors of <span
+class="math inline">\(R\)</span> satisfying the orthogonality
+condition</p>
+<p><span class="math display">\[
+V^T \Phi^T W \Phi V = I
+\]</span></p>
+<p>We’ll write <span class="math inline">\(K = \Phi^T W \Phi\)</span>
+since we’ve needed it so much</p>
+<p>Regular eigenvalue problem <span class="math display">\[
+RV = VD, \quad \langle V, V \rangle = I \implies V^T R V = D
+\]</span> Generalized eigenvalue problem <span class="math display">\[
+RV = KVD, \quad  \langle V, V \rangle_K = I \implies V^T R V = D
+\]</span></p>
+<p>The generalized eigenvalue problem has a solution only if <span
+class="math inline">\(K\)</span> is non-singular. de Boor suggests
+dropping knots at the boundary until the number of basis functions
+equals the number of sampling points.</p>
+<p>Ex. cubic smoothing splines (order 4) and 101 sampling points. Then
+there are 103 basis functions. We can drop knots associated with <span
+class="math inline">\(i=2, 100\)</span> to get to <span
+class="math inline">\(101\)</span> basis function.</p>
+<p><span class="math display">\[
+M(\lambda)^{-1} = V(I + \lambda D)^{-1} V^T
+\]</span> which can substantially decrease computation.</p>
+<p>Gradients of the <span class="math inline">\(\text{GCV}\)</span>
+criterion can also be computed efficiently leveraging the generalized
+eigendecomposition.</p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.4.3 (2025-02-28)
+Platform: aarch64-apple-darwin23.6.0
+Running under: macOS Sonoma 14.6
+
+Matrix products: default
+BLAS:   /opt/homebrew/Cellar/openblas/0.3.29/lib/libopenblasp-r0.3.29.dylib 
+LAPACK: /opt/homebrew/Cellar/r/4.4.3/lib/R/lib/libRlapack.dylib;  LAPACK version 3.12.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: America/Chicago
+tzcode source: internal
+
+attached base packages:
+[1] splines   stats     graphics  grDevices utils     datasets  methods  
+[8] base     
+
+other attached packages:
+[1] fda_6.3.0       deSolve_1.40    fds_1.8         RCurl_1.98-1.16
+[5] rainbow_3.8     pcaPP_2.0-5     MASS_7.3-64     workflowr_1.7.1
+
+loaded via a namespace (and not attached):
+ [1] ks_1.15.1          sass_0.4.9         bitops_1.0-9       KernSmooth_2.23-26
+ [5] stringi_1.8.7      lattice_0.22-6     hdrcde_3.4         pracma_2.4.4      
+ [9] digest_0.6.37      magrittr_2.0.3     evaluate_1.0.3     grid_4.4.3        
+[13] mvtnorm_1.3-3      fastmap_1.2.0      rprojroot_2.0.4    jsonlite_2.0.0    
+[17] Matrix_1.7-2       processx_3.8.6     whisker_0.4.1      mclust_6.1.1      
+[21] ps_1.9.0           promises_1.3.2     httr_1.4.7         jquerylib_0.1.4   
+[25] cli_3.6.4          rlang_1.1.5        cachem_1.1.0       yaml_2.3.10       
+[29] tools_4.4.3        colorspace_2.1-1   httpuv_1.6.15      vctrs_0.6.5       
+[33] R6_2.6.1           lifecycle_1.0.4    git2r_0.36.2       stringr_1.5.1     
+[37] fs_1.6.5           cluster_2.1.8      pkgconfig_2.0.3    callr_3.7.6       
+[41] pillar_1.10.1      bslib_0.9.0        later_1.4.1        glue_1.8.0        
+[45] Rcpp_1.0.14        xfun_0.51          tibble_3.2.1       rstudioapi_0.17.1 
+[49] knitr_1.50         htmltools_0.5.8.1  rmarkdown_2.29     compiler_4.4.3    
+[53] getPass_0.2-4     </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
