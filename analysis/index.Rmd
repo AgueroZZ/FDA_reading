@@ -14,3 +14,4 @@ The books is avaliable online at this [link](https://link.springer.com/book/10.1
 Below are the summaries of the chapters we have read so far. The summaries are written by the participants of the reading group.
 
 + [Chapter 4: Smoothing functional data by least squares.](chapter4.html)
++ [Chapter 5:Smoothing functional data with a roughness penalty](chapter5.html)
