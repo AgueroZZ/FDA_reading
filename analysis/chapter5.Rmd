@@ -1,5 +1,5 @@
 ---
-title: "chapter5"
+title: "Chapter 5: Smoothing functional data with a roughness penalty"
 output: html_document
 ---
 
