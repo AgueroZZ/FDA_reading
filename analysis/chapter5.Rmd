@@ -384,6 +384,63 @@ which can substantially decrease computation.
 
 Gradients of the $\text{GCV}$ criterion can also be computed efficiently leveraging the generalized eigendecomposition.
 
+## 5.5 Confidence intervals for function values and functional probes
 
+Question: how do you compute confidence limits on some quantity that depends on $x$, which is estimated by $\hat x$ via smoothing with roughness penalty?
 
+E.g. how precisely is $x(t)$ estimated by ${\bf y}$. How much variation would we expect in $\hat x^{(k)}(t)$ if we kept resampling ${\bf y}^{(k)}$ 
+
+We want to construct a confidence limit such that
+$$
+\mathbb P\{x(t) \in (x_l(t), x_u(t)) \} = 0.95
+$$
+Note the difference between the pointwise confidence limit and global confidence limits which upper and lower bound the function over a region of the domain. These can be obtained by bootstrapping.
+
+### 5.5.1 Linear functional probes
+
+$$
+\rho_\xi(X) = \int \xi(t) x(t) dt
+$$
+- $\rho_\xi$ is called a *functional probe*
+- $\xi$ is a *linear probe function*. This function is chosen to highlight some interesting feature of $x$. E.g. peak, valley, difference between function values in different regions.
+- Generalized then notion of a *contrast* in ANOVA
+
+**Linear**
+$$
+\rho_\xi(ax_1 + b x_2) = a \rho_\xi(x_1) + b \rho_\xi(x_2)
+$$
+
+**Evaluation map**
+You can design a probe that
+$$
+\rho_t(x) = x(t)
+$$
+we can approach the evaluation map using a probe function that concentrates it's mass at $t$, e.g. $N(x; t, \sigma^2)$ as $\sigma^2 \rightarrow 0$. 
+
+### 5.5.2 Two linear mappings defining a probe value
+
+`y2cMap` converts raw data vector $y$ to the coefficient vector $c$. There is a linear mapping $S \in \mathbb R^{K \times n}$ 
+$$
+{\bf c} = S {\bf y}.
+$$
+`c2rMap` converts the coefficient vector ${\bf c}$ to the scalar quantity, $L\in \mathbb R{1 \times K}$ 
+$$
+\rho_{\xi} (x) = L c.
+$$
+
+The composite of these two is `y2rmap`
+$$
+\rho_\xi(x) = LS{\bf y}
+$$
+
+**Example**
+Suppose ${\bf c}$ are the coefficients for simple linear regression estimated by least squares. $S = (X^TX)^{-1} X^T$ and Suppose we want to probe if $c_1 = c_2$, $L = [1, -1, 0, \dots, 0]$ 
+
+### 5.5.3 Computing confidence limits for function values
+
+1. $S = (K + \lambda R)^{-1} \Phi^T W$ 
+2. $x(t) = \langle \phi({\bf t}), {\bf c} \rangle = \langle \phi({\bf t}), S{\bf y} \rangle$. $L= \phi({\bf t})^T$ 
+3. Regarding $x({\bf t})$ as fixed, ${\bf y} = x({\bf t}) + \epsilon$, $\Sigma_e = \text{Var}(\epsilon)$ 
+4. $\text{Var}[\hat x(t)] = LS \Sigma_e S^T L$ 
+### 5.5.4 Confidence limits for growth acceleration
 
