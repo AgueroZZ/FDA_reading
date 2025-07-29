@@ -375,7 +375,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-07-28
+<strong>Last updated:</strong> 2025-07-29
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -506,15 +506,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomAgueroZZFDAreadingtree613ca9de3f20233286c9033efbf1eabc547f791ctargetblank613ca9da">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomAgueroZZFDAreadingtreebf0cb1dcb47f5c25ba9347d0854313ad72d9e107targetblankbf0cb1da">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/AgueroZZ/FDA_reading/tree/613ca9de3f20233286c9033efbf1eabc547f791c" target="_blank">613ca9d</a>
+<a href="https://github.com/AgueroZZ/FDA_reading/tree/bf0cb1dcb47f5c25ba9347d0854313ad72d9e107" target="_blank">bf0cb1d</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomAgueroZZFDAreadingtree613ca9de3f20233286c9033efbf1eabc547f791ctargetblank613ca9da"
+id="strongRepositoryversionstrongahrefhttpsgithubcomAgueroZZFDAreadingtreebf0cb1dcb47f5c25ba9347d0854313ad72d9e107targetblankbf0cb1da"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -524,7 +524,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/AgueroZZ/FDA_reading/tree/613ca9de3f20233286c9033efbf1eabc547f791c" target="_blank">613ca9d</a>.
+<a href="https://github.com/AgueroZZ/FDA_reading/tree/bf0cb1dcb47f5c25ba9347d0854313ad72d9e107" target="_blank">bf0cb1d</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -591,6 +591,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/AgueroZZ/FDA_reading/blob/bf0cb1dcb47f5c25ba9347d0854313ad72d9e107/analysis/chapter5.Rmd" target="_blank">bf0cb1d</a>
+</td>
+<td>
+Karl Tayeb
+</td>
+<td>
+2025-07-29
+</td>
+<td>
+wflow_publish("analysis/chapter5.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/AgueroZZ/FDA_reading/8a90d58dfc731d0db0f2681d54ac675e4ef0d54f/docs/chapter5.html" target="_blank">8a90d58</a>
+</td>
+<td>
+Karl Tayeb
+</td>
+<td>
+2025-07-28
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1485,6 +1519,91 @@ M(\lambda)^{-1} = V(I + \lambda D)^{-1} V^T
 <p>Gradients of the <span class="math inline">\(\text{GCV}\)</span>
 criterion can also be computed efficiently leveraging the generalized
 eigendecomposition.</p>
+</div>
+</div>
+</div>
+<div id="confidence-intervals-for-function-values-and-functional-probes"
+class="section level2">
+<h2>5.5 Confidence intervals for function values and functional
+probes</h2>
+<p>Question: how do you compute confidence limits on some quantity that
+depends on <span class="math inline">\(x\)</span>, which is estimated by
+<span class="math inline">\(\hat x\)</span> via smoothing with roughness
+penalty?</p>
+<p>E.g. how precisely is <span class="math inline">\(x(t)\)</span>
+estimated by <span class="math inline">\({\bf y}\)</span>. How much
+variation would we expect in <span class="math inline">\(\hat
+x^{(k)}(t)\)</span> if we kept resampling <span
+class="math inline">\({\bf y}^{(k)}\)</span></p>
+<p>We want to construct a confidence limit such that <span
+class="math display">\[
+\mathbb P\{x(t) \in (x_l(t), x_u(t)) \} = 0.95
+\]</span> Note the difference between the pointwise confidence limit and
+global confidence limits which upper and lower bound the function over a
+region of the domain. These can be obtained by bootstrapping.</p>
+<div id="linear-functional-probes" class="section level3">
+<h3>5.5.1 Linear functional probes</h3>
+<p><span class="math display">\[
+\rho_\xi(X) = \int \xi(t) x(t) dt
+\]</span> - <span class="math inline">\(\rho_\xi\)</span> is called a
+<em>functional probe</em> - <span class="math inline">\(\xi\)</span> is
+a <em>linear probe function</em>. This function is chosen to highlight
+some interesting feature of <span class="math inline">\(x\)</span>. E.g.
+peak, valley, difference between function values in different regions. -
+Generalized then notion of a <em>contrast</em> in ANOVA</p>
+<p><strong>Linear</strong> <span class="math display">\[
+\rho_\xi(ax_1 + b x_2) = a \rho_\xi(x_1) + b \rho_\xi(x_2)
+\]</span></p>
+<p><strong>Evaluation map</strong> You can design a probe that <span
+class="math display">\[
+\rho_t(x) = x(t)
+\]</span> we can approach the evaluation map using a probe function that
+concentrates it’s mass at <span class="math inline">\(t\)</span>,
+e.g. <span class="math inline">\(N(x; t, \sigma^2)\)</span> as <span
+class="math inline">\(\sigma^2 \rightarrow 0\)</span>.</p>
+</div>
+<div id="two-linear-mappings-defining-a-probe-value"
+class="section level3">
+<h3>5.5.2 Two linear mappings defining a probe value</h3>
+<p><code>y2cMap</code> converts raw data vector <span
+class="math inline">\(y\)</span> to the coefficient vector <span
+class="math inline">\(c\)</span>. There is a linear mapping <span
+class="math inline">\(S \in \mathbb R^{K \times n}\)</span> <span
+class="math display">\[
+{\bf c} = S {\bf y}.
+\]</span> <code>c2rMap</code> converts the coefficient vector <span
+class="math inline">\({\bf c}\)</span> to the scalar quantity, <span
+class="math inline">\(L\in \mathbb R{1 \times K}\)</span> <span
+class="math display">\[
+\rho_{\xi} (x) = L c.
+\]</span></p>
+<p>The composite of these two is <code>y2rmap</code> <span
+class="math display">\[
+\rho_\xi(x) = LS{\bf y}
+\]</span></p>
+<p><strong>Example</strong> Suppose <span class="math inline">\({\bf
+c}\)</span> are the coefficients for simple linear regression estimated
+by least squares. <span class="math inline">\(S = (X^TX)^{-1}
+X^T\)</span> and Suppose we want to probe if <span
+class="math inline">\(c_1 = c_2\)</span>, <span class="math inline">\(L
+= [1, -1, 0, \dots, 0]\)</span></p>
+</div>
+<div id="computing-confidence-limits-for-function-values"
+class="section level3">
+<h3>5.5.3 Computing confidence limits for function values</h3>
+<ol style="list-style-type: decimal">
+<li><span class="math inline">\(S = (K + \lambda R)^{-1} \Phi^T
+W\)</span></li>
+<li><span class="math inline">\(x(t) = \langle \phi({\bf t}), {\bf c}
+\rangle = \langle \phi({\bf t}), S{\bf y} \rangle\)</span>. <span
+class="math inline">\(L= \phi({\bf t})^T\)</span></li>
+<li>Regarding <span class="math inline">\(x({\bf t})\)</span> as fixed,
+<span class="math inline">\({\bf y} = x({\bf t}) + \epsilon\)</span>,
+<span class="math inline">\(\Sigma_e =
+\text{Var}(\epsilon)\)</span></li>
+<li><span class="math inline">\(\text{Var}[\hat x(t)] = LS \Sigma_e S^T
+L\)</span> ### 5.5.4 Confidence limits for growth acceleration</li>
+</ol>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1531,7 +1650,6 @@ loaded via a namespace (and not attached):
 [45] Rcpp_1.0.14        xfun_0.51          tibble_3.2.1       rstudioapi_0.17.1 
 [49] knitr_1.50         htmltools_0.5.8.1  rmarkdown_2.29     compiler_4.4.3    
 [53] getPass_0.2-4     </code></pre>
-</div>
 </div>
 </div>
 </div>
